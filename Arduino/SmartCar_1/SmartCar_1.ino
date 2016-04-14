@@ -2,7 +2,14 @@
 
 Car car;
 
-// Number of the LED pins
+//////////////////////////////////////////////////////
+
+/*
+ * Code for LED - turn indicators
+ * Created by Pierre L
+ */
+
+// Number of the LED pins 
 const int leftPin = 7;
 const int rightPin = 8;
 
@@ -13,16 +20,16 @@ int rightState = LOW;
 // stores last time LED was updated.
 unsigned long previousMillis = 0;
 
-
 //interval at which the LED blinks (ms)
 const long interval = 500; 
 
 boolean leftBlink = false;
 boolean rightBlink = false;
 
+/////////////////////////////////////////////////////
 
 void setup() {
-  Serial.begin(9600);
+  Serial3.begin(9600);
   pinMode(leftPin, OUTPUT);
   pinMode(rightPin, OUTPUT);
   car.begin();
@@ -39,10 +46,17 @@ void loop() {
   } */
 }
 
+//////////////////////////////////////////////////////////
+
+/*
+ * Switch case which takes the output from the joystick
+ * Created by Olle R.
+ */
+
 void handleInput() {
-  if (Serial.available()) {
+  if (Serial3.available()) {
     char input;
-    while (Serial.available()) input = Serial.read();
+    while (Serial3.available()) input = Serial3.read();
     switch (input) {
       case 'a': //Drive forward
         car.setSpeed(30);
@@ -102,6 +116,13 @@ void handleInput() {
     }
   }
 }
+
+//////////////////////////////////////////////////////////
+
+/*
+ * Making the LED "blink" without using delay().
+ * Created by Pierre L
+ */
 
 void turnLeft() {
 unsigned long currentMillis = millis();
