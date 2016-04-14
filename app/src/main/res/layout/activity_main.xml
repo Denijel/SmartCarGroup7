@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.denijel.joystick.CustomSurfaceView
+    <com.example.denijel.smartcargroup7.CustomSurfaceView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="15dp" />

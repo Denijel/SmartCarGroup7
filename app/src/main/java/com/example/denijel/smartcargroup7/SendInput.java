@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.view.View;
@@ -37,27 +38,17 @@ public class SendInput extends Activity {
 
 
 
+
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         //Try number 3
 
-        Context context;
-
-        CustomSurfaceView csv = new CustomSurfaceView(this);
-
-        while(!csv.thread.isCancelled()){
-            System.out.println(csv.angle);
-        }
-
-
-
-
-
         final String address = getIntent().getStringExtra("address").trim();
         btDevice=btAdapter.getRemoteDevice(address);
         BluetoothConnect.start();
+
 
 
         Button right = (Button)findViewById(R.id.rightBlinker);
@@ -74,8 +65,24 @@ public class SendInput extends Activity {
             }
         });
 
+        final CustomSurfaceView csv = new CustomSurfaceView(this);
+
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                while(!csv.thread.isCancelled()){
+                    System.out.println(csv.angle);
+                }
+                return null;
+
+            }
+        };
+
+        task.execute();
 
     }
+
+
     Thread BluetoothConnect=new Thread(){
         public void run()
         {

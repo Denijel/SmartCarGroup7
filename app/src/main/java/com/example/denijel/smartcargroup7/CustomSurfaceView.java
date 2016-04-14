@@ -3,20 +3,13 @@ package com.example.denijel.smartcargroup7;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
-import android.util.FloatMath;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -72,8 +65,8 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         radius = 200;
         paint1.setTextSize(40);
         paint1.setColor(Color.rgb(255, 0, 0));
-        ball = BitmapFactory.decodeResource(getResources(),R.drawable.ball_png);
-        background = BitmapFactory.decodeResource(getResources(), R.drawable.joystick_png);
+        ball = BitmapFactory.decodeResource(getResources(),R.drawable.ball);
+        background = BitmapFactory.decodeResource(getResources(), R.drawable.joystick);
         background = Bitmap.createScaledBitmap(background, 600, 600, true);
         ball = Bitmap.createScaledBitmap(ball, 200, 200, true);
 
@@ -153,7 +146,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
                 public boolean onTouch(View v, MotionEvent event) {
                     x = event.getX();
                     y = event.getY();
-                    System.out.println(x + " " + y);
+                    //System.out.println(x + " " + y);
 
                     calculateValues(x,y);
 
@@ -198,9 +191,9 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
                         xx = zeroX + dx;
                         yy = zeroY + dy;
                     }
-                    System.out.println("dx: " + dx);
+                    /*System.out.println("dx: " + dx);
                     System.out.println("dy: " + dy);
-                    System.out.println(angle);
+                    System.out.println(angle);*/
                     x = xx;
                     y = yy;
 
