@@ -11,7 +11,7 @@ Car car;
 
 // Number of the LED pins 
 const int leftPin = 7;
-const int rightPin = 8;
+const int rightPin = 4;
 
 // state used to set the LED. Variables will change
 int leftState = LOW;
@@ -25,6 +25,7 @@ const long interval = 500;
 
 boolean leftBlink = false;
 boolean rightBlink = false;
+char character = 'l';
 
 /////////////////////////////////////////////////////
 
@@ -35,15 +36,11 @@ void setup() {
   car.begin();
 }
 
-void loop() {
-  handleInput();
-
- /* while (leftBlink) {
-    turnLeft();
+void loop(){
+  if(Serial3.available()){
+    character = Serial3.read();
   }
-  while (rightBlink) {
-    turnRight();
-  } */
+  handleInput(character);
 }
 
 //////////////////////////////////////////////////////////
@@ -53,59 +50,58 @@ void loop() {
  * Created by Olle R.
  */
 
-void handleInput() {
-  if (Serial3.available()) {
-    char input;
-    while (Serial3.available()) input = Serial3.read();
-    switch (input) {
+void handleInput(char a) {
+
+    
+    switch (a) {
       case 'a': //Drive forward
         car.setSpeed(30);
         car.setAngle(0);
+        leftState = LOW;
+        rightState = LOW;
+        digitalWrite(rightPin, rightState);
+        digitalWrite(leftPin, leftState);
         break; 
       case 'b': //Drive backwards
         car.setSpeed(-30);
         car.setAngle(0); 
+        leftState = HIGH;
+        rightState = HIGH;
+        digitalWrite(rightPin, rightState);
+        digitalWrite(leftPin, leftState);
         break; 
-      case 'c':  //Backwards hard left
-        car.setSpeed(-30);
+      case 'h': //Forward hard left 
+      turnLeft();
+        car.setSpeed(30);
         car.setAngle(-70);
         break;
-      case 'd':  //Backwards light left
-        car.setSpeed(-30);
+      case 'i': //Forward light left 
+      turnLeft();
+        car.setSpeed(30);
         car.setAngle(-40);
         break;
-      case 'e': //Backwards hard right
-        car.setSpeed(-30);
-        car.setAngle(-110);
-        break;
-      case 'f': //Backwards light right
-        car.setSpeed(-30);
-        car.setAngle(-140);
-        break;
-      case 'h': //Forward hard left 
+      case 'j': //Forward hard right
+      turnRight();
         car.setSpeed(30);
         car.setAngle(70);
         break;
-      case 'i': //Forward light left 
+      case 'k': //Forward light right 
+      turnRight();
         car.setSpeed(30);
         car.setAngle(40);
-        break;
-      case 'j': //Forward hard right
-        car.setSpeed(30);
-        car.setAngle(110);
-        break;
-      case 'k': //Forward light right 
-        car.setSpeed(40);
-        car.setAngle(140);
         break;
       case 'l': //If joystick is in the middle, stop the car.
         car.setSpeed(0);
         car.setAngle(0);
+        leftState = LOW;
+        rightState = LOW;
+        digitalWrite(rightPin, rightState);
+        digitalWrite(leftPin, leftState);
         break;
       default: //Errors and unknown input will cause the car to stop.
         car.setSpeed(0);
         car.setAngle(0);
-    }
+    
   }
 }
 
@@ -122,6 +118,8 @@ unsigned long currentMillis = millis();
     //save the last time you blinked the LED
     previousMillis = currentMillis;
 
+    rightState = LOW;
+
     //if the LED is off turn it on and vice-versa;
     if (leftState == LOW) {
       leftState = HIGH; }
@@ -129,7 +127,8 @@ unsigned long currentMillis = millis();
         leftState = LOW; }
 
   //set the LED with the leftState of the variable
-  digitalWrite(leftPin, leftState);
+    digitalWrite(rightPin, rightState);
+    digitalWrite(leftPin, leftState);
   }
 }
 
@@ -139,6 +138,8 @@ unsigned long currentMillis = millis();
     //save the last time you blinked the LED
     previousMillis = currentMillis;
 
+    leftState = LOW;
+
     //if the LED is off turn it on and vice-versa;
     if (rightState == LOW) {
       rightState = HIGH; }
@@ -146,6 +147,8 @@ unsigned long currentMillis = millis();
         rightState = LOW; }
   
   //set the LED with the rightState of the variable
-  digitalWrite(rightPin, rightState);
+    digitalWrite(rightPin, rightState);
+    digitalWrite(leftPin, leftState);
+
   }
 }
