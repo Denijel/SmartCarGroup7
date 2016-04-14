@@ -67,44 +67,36 @@ void handleInput() {
         car.setAngle(0); 
         break; 
       case 'c':  //Backwards hard left
-        turnLeft();
         car.setSpeed(-30);
         car.setAngle(-70);
         break;
       case 'd':  //Backwards light left
-        leftBlink = true;
         car.setSpeed(-30);
         car.setAngle(-40);
         break;
       case 'e': //Backwards hard right
         car.setSpeed(-30);
         car.setAngle(-110);
-        turnRight();
         break;
       case 'f': //Backwards light right
         car.setSpeed(-30);
         car.setAngle(-140);
-        rightBlink = true;
         break;
       case 'h': //Forward hard left 
         car.setSpeed(30);
         car.setAngle(70);
-        leftBlink = true;
         break;
       case 'i': //Forward light left 
         car.setSpeed(30);
         car.setAngle(40);
-        leftBlink = true;
         break;
       case 'j': //Forward hard right
         car.setSpeed(30);
         car.setAngle(110);
-        rightBlink = true; 
         break;
       case 'k': //Forward light right 
         car.setSpeed(40);
         car.setAngle(140);
-        rightBlink = true;
         break;
       case 'l': //If joystick is in the middle, stop the car.
         car.setSpeed(0);
