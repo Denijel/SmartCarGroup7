@@ -17,6 +17,12 @@
         android:layout_marginTop="250dp"
         android:text="Connect"
         />
+    <com.example.denijel.smartcargroup7.MjpegView
+        android:id="@+id/mv"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        />
 
     <!--<Button xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/rightBlinker"
