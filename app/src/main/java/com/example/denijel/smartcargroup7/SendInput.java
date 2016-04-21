@@ -1,5 +1,6 @@
 package com.example.denijel.smartcargroup7;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.view.View;
@@ -39,9 +41,11 @@ public class SendInput extends Activity {
 
 
 
+
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final CustomSurfaceView csv = new CustomSurfaceView(this);
 
         //Try number 3
 
@@ -51,36 +55,117 @@ public class SendInput extends Activity {
 
 
 
-        Button right = (Button)findViewById(R.id.rightBlinker);
-        right.setOnClickListener(new View.OnClickListener() {
+        /*Button back = (Button)findViewById(R.id.rightBlinker);
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String msg = "d";
-                System.out.println("BLABLAABLABLA");
+                String msg = "b";
+
                 try {
                     os.write(msg.getBytes());
-                    System.out.println("HAHAHHAHHHAHA");
+
                 } catch (Exception es) {
                 }
             }
         });
 
-        final CustomSurfaceView csv = new CustomSurfaceView(this);
-
-        AsyncTask task = new AsyncTask() {
+        Button leftTurn = (Button)findViewById(R.id.leftButton);
+        leftTurn.setOnClickListener(new View.OnClickListener() {
             @Override
-            protected Object doInBackground(Object[] params) {
-                while(!csv.thread.isCancelled()){
-                    System.out.println(csv.angle);
+            public void onClick(View v) {
+                String msg = "i";
+                try {
+                    os.write(msg.getBytes());
+
+                } catch (Exception es) {
                 }
-                return null;
 
             }
-        };
+        });
 
-        task.execute();
+        Button stop = (Button)findViewById(R.id.cameraButton);
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String msg = "l";
+                try {
+                    os.write(msg.getBytes());
+
+                } catch (Exception es) {
+                }
+            }
+        });
+
+        Button forward = (Button)findViewById(R.id.forwardButton);
+        forward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String msg = "a";
+
+                try {
+                    os.write(msg.getBytes());
+
+
+                } catch (Exception es) {
+                }
+
+            }
+        });
+
+        Button rightTurn = (Button)findViewById(R.id.rightButton);
+        rightTurn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String msg = "k";
+
+                try {
+                    os.write(msg.getBytes());
+
+
+                } catch (Exception es) {
+                }
+
+            }
+        });
+        */
+
+
+
+
+        Button connect = (Button)findViewById(R.id.leftBlinker);
+        connect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickList(v);
+            }
+        });
+
+
+
+
+
+
 
     }
+
+    public void onClickList(View target){
+        Intent listing = new Intent(this, com.example.denijel.smartcargroup7.BluetoothScan.class);
+        startActivity(listing);
+
+
+    }
+
+    /*public class MyTask extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            while(!csv.thread.isCancelled()){
+                System.out.println(csv.angle);
+            }
+
+            return null;
+        }
+    }*/
 
 
     Thread BluetoothConnect=new Thread(){
