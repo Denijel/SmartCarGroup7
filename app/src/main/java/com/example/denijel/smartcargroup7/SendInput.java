@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -25,13 +26,14 @@ import java.util.UUID;
 /**
  * Created by denijel on 4/13/16.
  */
-public class SendInput extends Activity {
+public class SendInput extends Activity{
 
     BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
     BluetoothDevice btDevice;
     BluetoothSocket btSocket;
     OutputStream os;
     InputStream in;
+    float angle;
     private SensorManager mSensorManager;
     private Sensor mAcc;
     private int BTSTATE = 0, SensorStatus=0;
@@ -45,13 +47,14 @@ public class SendInput extends Activity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final CustomSurfaceView csv = new CustomSurfaceView(this);
+
 
         //Try number 3
 
         final String address = getIntent().getStringExtra("address").trim();
         btDevice=btAdapter.getRemoteDevice(address);
         BluetoothConnect.start();
+
 
 
 
@@ -141,9 +144,25 @@ public class SendInput extends Activity {
         });
 
 
+        final CustomSurfaceView csv = new CustomSurfaceView(this);
+        Runnable runnable = new Runnable() {
 
+            @Override
+            public void run() {
+                while(!csv.thread.isCancelled()){
+                    System.out.println(angle);
 
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
 
+        Thread mythread = new Thread(runnable);
+        mythread.start();
 
 
     }
@@ -152,6 +171,12 @@ public class SendInput extends Activity {
         Intent listing = new Intent(this, com.example.denijel.smartcargroup7.BluetoothScan.class);
         startActivity(listing);
 
+
+    }
+
+    public float callMe(Float value){
+        angle = value;
+        return angle;
 
     }
 
@@ -217,5 +242,9 @@ public class SendInput extends Activity {
         }
 
     };
+
+
+    
+
 
 }

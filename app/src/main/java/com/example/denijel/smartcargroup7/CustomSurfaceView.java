@@ -34,17 +34,14 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
     boolean run = true;
     Bitmap ball, background, cachedBitmap;
     float zeroX, zeroY, radius;
-    BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
-    BluetoothDevice btDevice;
-    BluetoothSocket btSocket;
-    OutputStream os;
-    InputStream in;
     private static final UUID MY_UUID =UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private Context context;
 
 
     public CustomSurfaceView(Context context){
         super(context);
         init(context);
+        this.context = context;
     }
 
     public CustomSurfaceView(Context context, AttributeSet attrs){
@@ -113,12 +110,11 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         super.onDraw(canvas);
 
 
-
-
         canvas.drawRGB(255, 255, 255);
         canvas.drawBitmap(background, (canvas.getWidth() - canvas.getWidth() / 7) - background.getWidth() / 2, (canvas.getHeight() - canvas.getHeight() / 4) - background.getHeight() / 2, null);
         canvas.drawText(Float.toString(x), 60, 60, paint1);
         canvas.drawText(Float.toString(y), 60, 120, paint1);
+        passToMain(angle);
 
         if (x == 0 && y == 0) {
             canvas.drawBitmap(ball, (canvas.getWidth()-canvas.getWidth() / 7) - ball.getWidth() / 2, (canvas.getHeight()-canvas.getHeight() / 4) - ball.getHeight() / 2, null);
@@ -127,6 +123,10 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         else {
             canvas.drawBitmap(ball, x - ball.getWidth() / 2, y - ball.getHeight() / 2, null);
         }
+    }
+
+    private void passToMain(Float value){
+        ((SendInput) context).callMe(value);
     }
 
 
