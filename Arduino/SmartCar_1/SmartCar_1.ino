@@ -1,17 +1,22 @@
 #include <Smartcar.h>
 
 Car car;
-
+Odometer encoderRight;
 //////////////////////////////////////////////////////
 
 /*
  * Code for LED - turn indicators
+ * Code for Odometer = measure speed and distance
  * Created by Pierre L
  */
 
 // Number of the LED pins 
 const int leftPin = 7;
 const int rightPin = 4;
+
+// Number of the Odometer pins
+//const int encoderLeftPin = 2;
+const int encoderRightPin = 3;
 
 // state used to set the LED. Variables will change
 int leftState = LOW;
@@ -26,6 +31,9 @@ const long interval = 500;
 boolean leftBlink = false;
 boolean rightBlink = false;
 char character = 'l';
+int counter = 0;
+int var = 3.6;
+float mps, kph;
 
 /////////////////////////////////////////////////////
 
@@ -33,10 +41,24 @@ void setup() {
   Serial3.begin(9600);
   pinMode(leftPin, OUTPUT);
   pinMode(rightPin, OUTPUT);
+  //encoderLeft.attach(encoderLeftPin);
+  encoderRight.attach(encoderRightPin);
+  //encoderLeft.begin();
+  encoderRight.begin();
   car.begin();
 }
 
 void loop(){
+  counter++;
+  if (counter == 1000) {
+  mps = encoderRight.getSpeed();
+  kph = var * mps;
+  Serial3.println("Speed (m/s)");
+  Serial3.println(mps);
+  Serial3.println("Speed (km/h)");
+  Serial3.println(kph);
+  counter = 0;
+  }
   if(Serial3.available()){
     character = Serial3.read();
   }
@@ -46,7 +68,7 @@ void loop(){
 //////////////////////////////////////////////////////////
 
 /*
- * Switch case which takes the output from the joystick
+ * Switch case to make the car move in different directions
  * Created by Olle R.
  */
 
@@ -71,22 +93,22 @@ void handleInput(char a) {
         digitalWrite(leftPin, leftState);
         break; 
       case 'h': //Forward hard left 
-      turnLeft();
+      blinkLeft();
         car.setSpeed(30);
         car.setAngle(-70);
         break;
       case 'i': //Forward light left 
-      turnLeft();
+      blinkLeft();
         car.setSpeed(30);
         car.setAngle(-40);
         break;
       case 'j': //Forward hard right
-      turnRight();
+      blinkRight();
         car.setSpeed(30);
         car.setAngle(70);
         break;
       case 'k': //Forward light right 
-      turnRight();
+      blinkRight();
         car.setSpeed(30);
         car.setAngle(40);
         break;
@@ -112,7 +134,7 @@ void handleInput(char a) {
  * Created by Pierre L
  */
 
-void turnLeft() {
+void blinkLeft() {
 unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
     //save the last time you blinked the LED
@@ -132,7 +154,7 @@ unsigned long currentMillis = millis();
   }
 }
 
-void turnRight() {
+void blinkRight() {
 unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
     //save the last time you blinked the LED
