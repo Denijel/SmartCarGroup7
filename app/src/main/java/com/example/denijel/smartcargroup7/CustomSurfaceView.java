@@ -66,6 +66,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         background = BitmapFactory.decodeResource(getResources(), R.drawable.joystick);
         background = Bitmap.createScaledBitmap(background, 600, 600, true);
         ball = Bitmap.createScaledBitmap(ball, 200, 200, true);
+        this.context = context;
 
 
 
@@ -114,7 +115,10 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         canvas.drawBitmap(background, (canvas.getWidth() - canvas.getWidth() / 7) - background.getWidth() / 2, (canvas.getHeight() - canvas.getHeight() / 4) - background.getHeight() / 2, null);
         canvas.drawText(Float.toString(x), 60, 60, paint1);
         canvas.drawText(Float.toString(y), 60, 120, paint1);
-        passToMain(angle);
+        if (SendInput.active == true) {
+            passToMain(angle);
+        }
+
 
         if (x == 0 && y == 0) {
             canvas.drawBitmap(ball, (canvas.getWidth()-canvas.getWidth() / 7) - ball.getWidth() / 2, (canvas.getHeight()-canvas.getHeight() / 4) - ball.getHeight() / 2, null);
@@ -125,8 +129,13 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         }
     }
 
-    private void passToMain(Float value){
-        ((SendInput) context).callMe(value);
+    private void passToMain(float value){
+        if (SendInput.active == true) {
+            ((SendInput) context).callMe(value);
+        }
+
+
+
     }
 
 

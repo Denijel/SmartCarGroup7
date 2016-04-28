@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listViewPairedDevices;
     ArrayAdapter<BluetoothDevice> pairedDeviceAdapter;
     private static final String TAG = "MainActivity";
+    static boolean active = false;
 
     private MjpegView mv;
 

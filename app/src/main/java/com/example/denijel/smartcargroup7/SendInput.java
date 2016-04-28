@@ -39,6 +39,7 @@ public class SendInput extends Activity{
     private int BTSTATE = 0, SensorStatus=0;
     int MouseReq=0, read_values=0;
     private static final UUID MY_UUID =UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    static boolean active = false;
 
 
 
@@ -47,6 +48,7 @@ public class SendInput extends Activity{
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        active = true;
 
 
         //Try number 3
@@ -150,8 +152,21 @@ public class SendInput extends Activity{
             @Override
             public void run() {
                 while(!csv.thread.isCancelled()){
+                    if (angle > 1){
+                        String msg = "a";
+                        try{
+                            os.write(msg.getBytes());
+                            System.out.println("REFERENCE 1");
+                        }catch(Exception es){}
+                    }
+                    else if (angle < 1){
+                        String msg = "l";
+                        try{
+                            os.write(msg.getBytes());
+                            System.out.println("REFERENCE 0");
+                        }catch(Exception es){}
+                    }
                     System.out.println(angle);
-
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e) {
@@ -174,7 +189,7 @@ public class SendInput extends Activity{
 
     }
 
-    public float callMe(Float value){
+    public float callMe(float value){
         angle = value;
         return angle;
 
