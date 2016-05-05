@@ -14,17 +14,30 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.view.MotionEvent;
+<<<<<<< HEAD
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+=======
+import android.view.SurfaceHolder;
+>>>>>>> 3d6983fa832f3854482e1ad7cb17fb29d9594b96
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.UUID;
 
 /**
@@ -44,102 +57,37 @@ public class SendInput extends Activity{
     int MouseReq=0, read_values=0;
     private static final UUID MY_UUID =UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     static boolean active = false;
-
-
-
+    private static final String TAG = "MainActivity";
+    private MjpegView mv;
 
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         active = true;
-
-
         //Try number 3
+
+        new CommTerm().execute();
+
+        final Button left1 = (Button) findViewById(R.id.leftBlinker);
+        left1.bringToFront();
+
+        String URL = "http://129.232.12.12:8080/?action=stream";
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        System.out.println("Ssh done");
+        mv = new MjpegView(this);
+
+        //setContentView(mv);
+        LinearLayout camera = (LinearLayout) findViewById(R.id.middleSurface);
+        camera.addView(mv);
+        System.out.println("Added camera");
+        System.out.println("Camera started");
+        new DoRead().execute(URL);
 
         final String address = getIntent().getStringExtra("address").trim();
         btDevice=btAdapter.getRemoteDevice(address);
         BluetoothConnect.start();
-
-
-
-
-        /*Button back = (Button)findViewById(R.id.rightBlinker);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String msg = "b";
-
-                try {
-                    os.write(msg.getBytes());
-
-                } catch (Exception es) {
-                }
-            }
-        });
-
-        Button leftTurn = (Button)findViewById(R.id.leftButton);
-        leftTurn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String msg = "i";
-                try {
-                    os.write(msg.getBytes());
-
-                } catch (Exception es) {
-                }
-
-            }
-        });
-
-        Button stop = (Button)findViewById(R.id.cameraButton);
-        stop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String msg = "l";
-                try {
-                    os.write(msg.getBytes());
-
-                } catch (Exception es) {
-                }
-            }
-        });
-
-        Button forward = (Button)findViewById(R.id.forwardButton);
-        forward.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String msg = "a";
-
-                try {
-                    os.write(msg.getBytes());
-
-
-                } catch (Exception es) {
-                }
-
-            }
-        });
-
-        Button rightTurn = (Button)findViewById(R.id.rightButton);
-        rightTurn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String msg = "k";
-
-                try {
-                    os.write(msg.getBytes());
-
-
-                } catch (Exception es) {
-                }
-
-            }
-        });
-        */
-
-
-
 
         Button connect = (Button)findViewById(R.id.leftBlinker);
         connect.setOnClickListener(new View.OnClickListener() {
@@ -158,6 +106,15 @@ public class SendInput extends Activity{
 
 
 
+<<<<<<< HEAD
+=======
+
+        //final CustomSurfaceView csv = new CustomSurfaceView(this);
+        final CustomSurfaceView csv = (CustomSurfaceView)findViewById(R.id.cSurfaceView);
+        csv.setZOrderOnTop(true);
+        SurfaceHolder csvHolder = csv.getHolder();
+        csvHolder.setFormat(PixelFormat.TRANSLUCENT);
+>>>>>>> 3d6983fa832f3854482e1ad7cb17fb29d9594b96
         Runnable runnable = new Runnable() {
 
             @Override
@@ -189,7 +146,6 @@ public class SendInput extends Activity{
         Thread mythread = new Thread(runnable);
         mythread.start();
 
-
     }
 
     public void onClickList(View target){
@@ -197,6 +153,9 @@ public class SendInput extends Activity{
         startActivity(listing);
 
 
+    }
+    public void restartBtn(View target){
+        System.out.println("Hello");
     }
 
     public float callMeAngle(float value){
@@ -214,6 +173,42 @@ public class SendInput extends Activity{
         return y;
 
     }
+
+
+    public class DoRead extends AsyncTask<String, Void, MjpegInputStream> {
+        protected MjpegInputStream doInBackground(String... url) {
+            //TODO: if camera has authentication deal with it and don't just not work
+            HttpResponse res = null;
+            DefaultHttpClient httpclient = new DefaultHttpClient();
+            Log.d(TAG, "1. Sending http request");
+            try {
+                res = httpclient.execute(new HttpGet(URI.create(url[0])));
+                Log.d(TAG, "2. Request finished, status = " + res.getStatusLine().getStatusCode());
+                if (res.getStatusLine().getStatusCode() == 401) {
+                    //You must turn off camera User Access Control before this will work
+                    return null;
+                }
+                return new MjpegInputStream(res.getEntity().getContent());
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+                Log.d(TAG, "Request failed-ClientProtocolException", e);
+                //Error connecting to camera
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d(TAG, "Request failed-IOException", e);
+                //Error connecting to camera
+            }
+
+            return null;
+        }
+
+        protected void onPostExecute(MjpegInputStream result) {
+            mv.setSource(result);
+            mv.setDisplayMode(MjpegView.SIZE_BEST_FIT);
+            mv.showFps(true);
+        }
+    }
+
 
     /*public class MyTask extends AsyncTask<Void, Void, Void>{
 

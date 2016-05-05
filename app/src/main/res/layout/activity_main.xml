@@ -1,14 +1,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <com.example.denijel.smartcargroup7.CustomSurfaceView
+<<<<<<< HEAD
         android:id="@+id/cSurfaceView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:background="@android:color/white"/>
+=======
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="15dp"
+        android:background="@android:color/transparent"
+        android:id="@+id/cSurfaceView"/>
+>>>>>>> 3d6983fa832f3854482e1ad7cb17fb29d9594b96
 
     <Button xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/leftBlinker"
@@ -19,11 +28,12 @@
         android:layout_marginTop="250dp"
         android:text="Connect"
         />
-    <com.example.denijel.smartcargroup7.MjpegView
-        android:id="@+id/mv"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/middleSurface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         />
 
     <!--<Button xmlns:android="http://schemas.android.com/apk/res/android"

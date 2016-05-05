@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Button;
 
 import java.io.IOException;
 
@@ -25,7 +26,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
     public final static int SIZE_BEST_FIT   = 4;
     public final static int SIZE_FULLSCREEN = 8;
 
-    private MjpegViewThread thread;
+    MjpegViewThread thread;
     private MjpegInputStream mIn = null;
     private boolean showFps = false;
     private boolean mRun = false;
@@ -37,6 +38,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
     private int dispWidth;
     private int dispHeight;
     private int displayMode;
+    public Boolean Adin = true;
 
     public class MjpegViewThread extends Thread {
         private SurfaceHolder mSurfaceHolder;
@@ -102,36 +104,39 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
             Paint p = new Paint();
             String fps = "";
             while (mRun) {
-                if(surfaceDone) {
-                    try {
-                        c = mSurfaceHolder.lockCanvas();
-                        synchronized (mSurfaceHolder) {
-                            try {
-                                bm = mIn.readMjpegFrame();
-                                destRect = destRect(bm.getWidth(),bm.getHeight());
-                                c.drawColor(Color.BLACK);
-                                c.drawBitmap(bm, null, destRect, p);
-                                showFps = false;
-                                if(showFps) {
-                                    p.setXfermode(mode);
-                                    if(ovl != null) {
-                                        height = ((ovlPos & 1) == 1) ? destRect.top : destRect.bottom-ovl.getHeight();
-                                        width  = ((ovlPos & 8) == 8) ? destRect.left : destRect.right -ovl.getWidth();
-                                        c.drawBitmap(ovl, width, height, null);
-                                    }
-                                    p.setXfermode(null);
-                                    frameCounter++;
-                                    if((System.currentTimeMillis() - start) >= 1000) {
-                                        fps = String.valueOf(frameCounter)+"fps";
-                                        frameCounter = 0;
-                                        start = System.currentTimeMillis();
-                                        ovl = makeFpsOverlay(overlayPaint, fps);
+                    if (surfaceDone) {
+                        try {
+                            c = mSurfaceHolder.lockCanvas();
+                            synchronized (mSurfaceHolder) {
+                                try {
+                                    bm = mIn.readMjpegFrame();
+                                    destRect = destRect(bm.getWidth(), bm.getHeight());
+                                    c.drawColor(Color.BLACK);
+                                    c.drawBitmap(bm, null, destRect, p);
+                                    showFps = false;
+                                    if (showFps) {
+                                        p.setXfermode(mode);
+                                        if (ovl != null) {
+                                            height = ((ovlPos & 1) == 1) ? destRect.top : destRect.bottom - ovl.getHeight();
+                                            width = ((ovlPos & 8) == 8) ? destRect.left : destRect.right - ovl.getWidth();
+                                            c.drawBitmap(ovl, width, height, null);
+                                        }
+                                        p.setXfermode(null);
+                                        frameCounter++;
+                                        if ((System.currentTimeMillis() - start) >= 1000) {
+                                            fps = String.valueOf(frameCounter) + "fps";
+                                            frameCounter = 0;
+                                            start = System.currentTimeMillis();
+                                            ovl = makeFpsOverlay(overlayPaint, fps);
 
+                                        }
                                     }
+                                } catch (IOException e) {
                                 }
-                            } catch (IOException e) {}
+                            }
+                        } finally {
+                            if (c != null) mSurfaceHolder.unlockCanvasAndPost(c);
                         }
-                    } finally { if (c != null) mSurfaceHolder.unlockCanvasAndPost(c); }
                 }
             }
         }
@@ -177,7 +182,9 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void surfaceDestroyed(SurfaceHolder holder) {
         surfaceDone = false;
-        stopPlayback();
+        mRun = false;
+        //stopPlayback();
+
     }
 
     public MjpegView(Context context) {

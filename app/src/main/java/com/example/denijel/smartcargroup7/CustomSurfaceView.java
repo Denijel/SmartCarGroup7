@@ -44,10 +44,14 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         super(context);
         init(context);
         this.context = context;
+<<<<<<< HEAD
 
 
 
 
+=======
+        setZOrderOnTop(true);
+>>>>>>> 3d6983fa832f3854482e1ad7cb17fb29d9594b96
     }
 
     public CustomSurfaceView(Context context, AttributeSet attrs){
@@ -77,8 +81,6 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         this.setZOrderOnTop(true); //necessary
         getHolder().setFormat(PixelFormat.TRANSPARENT);
         getHolder().addCallback(this);
-
-
 
 
     }
@@ -122,10 +124,17 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         super.onDraw(canvas);
 
 
+<<<<<<< HEAD
         //canvas.drawRGB(255, 0, 255);
         //canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
         //Drawing the joystick in the bottom-right corner
+=======
+        //canvas.drawARGB(255, 0, 0);
+        //canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+
+
+>>>>>>> 3d6983fa832f3854482e1ad7cb17fb29d9594b96
         canvas.drawBitmap(background, (canvas.getWidth() - canvas.getWidth() / 7) - background.getWidth() / 2, (canvas.getHeight() - canvas.getHeight() / 4) - background.getHeight() / 2, null);
         canvas.drawText(Float.toString(x), 60, 60, paint1);
         canvas.drawText(Float.toString(y), 60, 120, paint1);
@@ -241,8 +250,13 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
             while(run) {
 
 
+                //Bitmap mBackgroundImage = Bitmap.createBitmap(600, 600,
+                //       Bitmap.Config.ARGB_8888);
+                //mBackgroundImage.eraseColor(Color.TRANSPARENT);
 
                 Canvas canvas = new Canvas();
+
+                //canvas.drawColor(Color.TRANSPARENT,PorterDuff.Mode.CLEAR);
 
 
 

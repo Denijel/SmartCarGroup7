@@ -14,7 +14,7 @@ public class CommTerm extends AsyncTask<String, Void, CommTerm> {
             String command = "python raspimjpeg.py -w 640 -h 480 -r 15 -q 20 | streameye";
             String userName = "pi";
             String password = "raspberry";
-            String connectionIP = "192.168.1.108";
+            String connectionIP = "129.232.12.12";
             SSHmanager instance = new SSHmanager(userName, password, connectionIP, "");
             instance.connect();
 
