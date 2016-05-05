@@ -8,6 +8,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -42,6 +44,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         super(context);
         init(context);
         this.context = context;
+        setZOrderOnTop(true);
     }
 
     public CustomSurfaceView(Context context, AttributeSet attrs){
@@ -67,8 +70,6 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         background = Bitmap.createScaledBitmap(background, 600, 600, true);
         ball = Bitmap.createScaledBitmap(ball, 200, 200, true);
         this.context = context;
-
-
 
     }
 
@@ -111,7 +112,10 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         super.onDraw(canvas);
 
 
-        canvas.drawRGB(255, 255, 255);
+        //canvas.drawARGB(255, 0, 0);
+        //canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+
+
         canvas.drawBitmap(background, (canvas.getWidth() - canvas.getWidth() / 7) - background.getWidth() / 2, (canvas.getHeight() - canvas.getHeight() / 4) - background.getHeight() / 2, null);
         canvas.drawText(Float.toString(x), 60, 60, paint1);
         canvas.drawText(Float.toString(y), 60, 120, paint1);
@@ -222,8 +226,13 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
             while(run) {
 
 
+                //Bitmap mBackgroundImage = Bitmap.createBitmap(600, 600,
+                //       Bitmap.Config.ARGB_8888);
+                //mBackgroundImage.eraseColor(Color.TRANSPARENT);
 
                 Canvas canvas = new Canvas();
+
+                //canvas.drawColor(Color.TRANSPARENT,PorterDuff.Mode.CLEAR);
 
 
 
@@ -235,6 +244,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
                         zeroX = (canvas.getWidth()-canvas.getWidth()/8);
                         zeroY = (canvas.getHeight()-canvas.getHeight()/4);
+                        canvas.drawColor(0, android.graphics.PorterDuff.Mode.CLEAR);
                         cSurfaceView.onDraw(canvas, x, y, zeroX, zeroY);
 
                     }

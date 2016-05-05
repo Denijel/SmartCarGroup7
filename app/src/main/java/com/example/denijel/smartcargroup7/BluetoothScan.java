@@ -103,7 +103,7 @@ public class BluetoothScan extends Activity {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
                 //scanButton.setBackgroundColor(Color.parseColor("#2695CE"));
                 while(!ba.startDiscovery());
