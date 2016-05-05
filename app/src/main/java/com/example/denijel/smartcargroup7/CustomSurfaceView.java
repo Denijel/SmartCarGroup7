@@ -44,7 +44,14 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         super(context);
         init(context);
         this.context = context;
+<<<<<<< HEAD
+
+
+
+
+=======
         setZOrderOnTop(true);
+>>>>>>> 3d6983fa832f3854482e1ad7cb17fb29d9594b96
     }
 
     public CustomSurfaceView(Context context, AttributeSet attrs){
@@ -65,11 +72,16 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         radius = 200;
         paint1.setTextSize(40);
         paint1.setColor(Color.rgb(255, 0, 0));
-        ball = BitmapFactory.decodeResource(getResources(),R.drawable.ball);
+        ball = BitmapFactory.decodeResource(getResources(), R.drawable.ball);
         background = BitmapFactory.decodeResource(getResources(), R.drawable.joystick);
         background = Bitmap.createScaledBitmap(background, 600, 600, true);
         ball = Bitmap.createScaledBitmap(ball, 200, 200, true);
         this.context = context;
+        this.setBackgroundColor(Color.TRANSPARENT);
+        this.setZOrderOnTop(true); //necessary
+        getHolder().setFormat(PixelFormat.TRANSPARENT);
+        getHolder().addCallback(this);
+
 
     }
 
@@ -112,15 +124,24 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         super.onDraw(canvas);
 
 
+<<<<<<< HEAD
+        //canvas.drawRGB(255, 0, 255);
+        //canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+
+        //Drawing the joystick in the bottom-right corner
+=======
         //canvas.drawARGB(255, 0, 0);
         //canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
 
+>>>>>>> 3d6983fa832f3854482e1ad7cb17fb29d9594b96
         canvas.drawBitmap(background, (canvas.getWidth() - canvas.getWidth() / 7) - background.getWidth() / 2, (canvas.getHeight() - canvas.getHeight() / 4) - background.getHeight() / 2, null);
         canvas.drawText(Float.toString(x), 60, 60, paint1);
         canvas.drawText(Float.toString(y), 60, 120, paint1);
+        canvas.drawText(Float.toString(angle), 60, 180, paint1);
+
         if (SendInput.active == true) {
-            passToMain(angle);
+            passToMain(angle,x,y);
         }
 
 
@@ -133,9 +154,12 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         }
     }
 
-    private void passToMain(float value){
+    private void passToMain(float value, float x, float y){
         if (SendInput.active == true) {
-            ((SendInput) context).callMe(value);
+            ((SendInput) context).callMeAngle(value);
+            ((SendInput) context).callMeX(x);
+            ((SendInput) context).callMeY(y);
+
         }
 
 

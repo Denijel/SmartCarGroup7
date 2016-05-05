@@ -16,7 +16,13 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.MotionEvent;
+<<<<<<< HEAD
+import android.view.Surface;
 import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+=======
+import android.view.SurfaceHolder;
+>>>>>>> 3d6983fa832f3854482e1ad7cb17fb29d9594b96
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -44,7 +50,7 @@ public class SendInput extends Activity{
     BluetoothSocket btSocket;
     OutputStream os;
     InputStream in;
-    float angle;
+    float angle, x, y;
     private SensorManager mSensorManager;
     private Sensor mAcc;
     private int BTSTATE = 0, SensorStatus=0;
@@ -91,13 +97,24 @@ public class SendInput extends Activity{
             }
         });
 
+        final CustomSurfaceView csv = (CustomSurfaceView)findViewById(R.id.cSurfaceView);
+        /*csv.setZOrderOnTop(true);
+        SurfaceHolder csvHolder = csv.getHolder();
+        csvHolder.setFormat(PixelFormat.TRANSPARENT);
+        */
+        //final CustomSurfaceView csv = new CustomSurfaceView(this);
 
+
+
+<<<<<<< HEAD
+=======
 
         //final CustomSurfaceView csv = new CustomSurfaceView(this);
         final CustomSurfaceView csv = (CustomSurfaceView)findViewById(R.id.cSurfaceView);
         csv.setZOrderOnTop(true);
         SurfaceHolder csvHolder = csv.getHolder();
         csvHolder.setFormat(PixelFormat.TRANSLUCENT);
+>>>>>>> 3d6983fa832f3854482e1ad7cb17fb29d9594b96
         Runnable runnable = new Runnable() {
 
             @Override
@@ -107,14 +124,13 @@ public class SendInput extends Activity{
                         String msg = "a";
                         try{
                             os.write(msg.getBytes());
-                            System.out.println("REFERENCE 1");
                         }catch(Exception es){}
                     }
                     else if (angle < 1){
-                        String msg = "l";
+                        String msg = "i";
                         try{
                             os.write(msg.getBytes());
-                            System.out.println("REFERENCE 0");
+
                         }catch(Exception es){}
                     }
                     System.out.println(angle);
@@ -142,9 +158,19 @@ public class SendInput extends Activity{
         System.out.println("Hello");
     }
 
-    public float callMe(float value){
+    public float callMeAngle(float value){
         angle = value;
         return angle;
+
+    }
+    public float callMeX(float value){
+        x = value;
+        return x;
+
+    }
+    public float callMeY(float value){
+        y = value;
+        return y;
 
     }
 
@@ -198,8 +224,8 @@ public class SendInput extends Activity{
     Thread BluetoothConnect=new Thread(){
         public void run()
         {
-            Looper.prepare();
-            Toast.makeText(getApplicationContext(), "Scanning and connecting to pc", Toast.LENGTH_LONG).show();
+            //Looper.prepare();
+            //Toast.makeText(getApplicationContext(), "Scanning and connecting to pc", Toast.LENGTH_LONG).show();
             int i=0,flag=0;
             while(i<1000)
             {
@@ -208,11 +234,11 @@ public class SendInput extends Activity{
                     btSocket.connect();
                     os = btSocket.getOutputStream();
                     in=btSocket.getInputStream();
-                    if(mAcc!=null)
-                        SensorStatus=SensorStatus|1;
+                    /*if(mAcc!=null)
+                        SensorStatus=SensorStatus|1;*/
                     flag=1;
                     BTSTATE=1;
-                    os.write(SensorStatus);
+                    //os.write(SensorStatus);
                     MouseReq=in.read();
                     break;
                 }
@@ -221,7 +247,7 @@ public class SendInput extends Activity{
             }
             if(flag==0)
             {
-                Toast.makeText(getApplicationContext(),"Unable to connect", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"Unable to connect", Toast.LENGTH_SHORT).show();
                 finish();
             }
             while(read_values!=255)
@@ -230,7 +256,7 @@ public class SendInput extends Activity{
                     read_values=in.read();
                 }catch (IOException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             }
             BTSTATE=0;
