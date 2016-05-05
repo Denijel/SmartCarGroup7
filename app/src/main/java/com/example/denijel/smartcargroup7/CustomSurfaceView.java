@@ -8,6 +8,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -42,6 +44,10 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         super(context);
         init(context);
         this.context = context;
+
+
+
+
     }
 
     public CustomSurfaceView(Context context, AttributeSet attrs){
@@ -62,11 +68,16 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         radius = 200;
         paint1.setTextSize(40);
         paint1.setColor(Color.rgb(255, 0, 0));
-        ball = BitmapFactory.decodeResource(getResources(),R.drawable.ball);
+        ball = BitmapFactory.decodeResource(getResources(), R.drawable.ball);
         background = BitmapFactory.decodeResource(getResources(), R.drawable.joystick);
         background = Bitmap.createScaledBitmap(background, 600, 600, true);
         ball = Bitmap.createScaledBitmap(ball, 200, 200, true);
         this.context = context;
+        this.setBackgroundColor(Color.TRANSPARENT);
+        this.setZOrderOnTop(true); //necessary
+        getHolder().setFormat(PixelFormat.TRANSPARENT);
+        getHolder().addCallback(this);
+
 
 
 
@@ -111,12 +122,17 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         super.onDraw(canvas);
 
 
-        canvas.drawRGB(255, 255, 255);
+        //canvas.drawRGB(255, 0, 255);
+        //canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+
+        //Drawing the joystick in the bottom-right corner
         canvas.drawBitmap(background, (canvas.getWidth() - canvas.getWidth() / 7) - background.getWidth() / 2, (canvas.getHeight() - canvas.getHeight() / 4) - background.getHeight() / 2, null);
         canvas.drawText(Float.toString(x), 60, 60, paint1);
         canvas.drawText(Float.toString(y), 60, 120, paint1);
+        canvas.drawText(Float.toString(angle), 60, 180, paint1);
+
         if (SendInput.active == true) {
-            passToMain(angle);
+            passToMain(angle,x,y);
         }
 
 
@@ -129,9 +145,12 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         }
     }
 
-    private void passToMain(float value){
+    private void passToMain(float value, float x, float y){
         if (SendInput.active == true) {
-            ((SendInput) context).callMe(value);
+            ((SendInput) context).callMeAngle(value);
+            ((SendInput) context).callMeX(x);
+            ((SendInput) context).callMeY(y);
+
         }
 
 
@@ -235,6 +254,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
                         zeroX = (canvas.getWidth()-canvas.getWidth()/8);
                         zeroY = (canvas.getHeight()-canvas.getHeight()/4);
+                        canvas.drawColor(0, android.graphics.PorterDuff.Mode.CLEAR);
                         cSurfaceView.onDraw(canvas, x, y, zeroX, zeroY);
 
                     }

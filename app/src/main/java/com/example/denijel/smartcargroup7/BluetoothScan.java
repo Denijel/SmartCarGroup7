@@ -103,7 +103,7 @@ public class BluetoothScan extends Activity {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
                 //scanButton.setBackgroundColor(Color.parseColor("#2695CE"));
                 while(!ba.startDiscovery());
@@ -138,7 +138,7 @@ public class BluetoothScan extends Activity {
         {
             if(resultCode==Activity.RESULT_CANCELED){
                 if(!ba.isEnabled()){
-                    Toast.makeText(getApplicationContext(), "BLUETOOTH service is NOT AVAILABLE \n  APPLICATION TERMINATING", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "BLUETOOTH service is NOT AVAILABLE \n  APPLICATION TERMINATING", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
