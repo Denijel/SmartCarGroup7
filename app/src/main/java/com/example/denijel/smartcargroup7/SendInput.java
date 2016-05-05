@@ -185,13 +185,11 @@ public class SendInput extends Activity{
 
 
     /*public class MyTask extends AsyncTask<Void, Void, Void>{
-
         @Override
         protected Void doInBackground(Void... params) {
             while(!csv.thread.isCancelled()){
                 System.out.println(csv.angle);
             }
-
             return null;
         }
     }*/
@@ -248,7 +246,7 @@ public class SendInput extends Activity{
     };
 
 
-    
+
 
 
 }

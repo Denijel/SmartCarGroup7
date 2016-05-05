@@ -138,7 +138,7 @@ public class BluetoothScan extends Activity {
         {
             if(resultCode==Activity.RESULT_CANCELED){
                 if(!ba.isEnabled()){
-                    Toast.makeText(getApplicationContext(), "BLUETOOTH service is NOT AVAILABLE \n  APPLICATION TERMINATING", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "BLUETOOTH service is NOT AVAILABLE \n  APPLICATION TERMINATING", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }

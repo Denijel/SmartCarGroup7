@@ -54,7 +54,6 @@
         android:layout_marginTop="180dp"
         android:text="Right"
         android:layout_alignBottom="@+id/leftButton" />
-
     <Button xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/leftButton"
         android:layout_width="100dp"
@@ -63,7 +62,6 @@
         android:layout_marginTop="180dp"
         android:text="Left"
         android:layout_alignBottom="@+id/label1" />
-
     <Button xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/cameraButton"
         android:layout_width="150dp"
@@ -73,7 +71,6 @@
         android:layout_marginTop="250dp"
         android:text="Camera"
         android:onClick="activateCamera" />
-
     <TextView
         android:id="@+id/label1"
         android:layout_width="150dp"
