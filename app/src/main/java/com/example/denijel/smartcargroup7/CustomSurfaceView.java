@@ -112,15 +112,16 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         super.onDraw(canvas);
 
 
-        //canvas.drawARGB(255, 0, 0);
+        //canvas.drawRGB(255, 0, 0);
         //canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 
 
         canvas.drawBitmap(background, (canvas.getWidth() - canvas.getWidth() / 7) - background.getWidth() / 2, (canvas.getHeight() - canvas.getHeight() / 4) - background.getHeight() / 2, null);
         canvas.drawText(Float.toString(x), 60, 60, paint1);
         canvas.drawText(Float.toString(y), 60, 120, paint1);
+        canvas.drawText(Float.toString(angle), 60, 180, paint1);
         if (SendInput.active == true) {
-            passToMain(angle);
+            passToMain(angle, x, y);
         }
 
 
@@ -133,9 +134,11 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         }
     }
 
-    private void passToMain(float value){
+    private void passToMain(float value, float x, float y){
         if (SendInput.active == true) {
             ((SendInput) context).callMe(value);
+            ((SendInput) context).callMeX(x);
+            ((SendInput) context).callMeY(y);
         }
 
 

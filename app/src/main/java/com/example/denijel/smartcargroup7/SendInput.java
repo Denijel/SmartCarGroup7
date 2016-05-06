@@ -44,7 +44,7 @@ public class SendInput extends Activity{
     BluetoothSocket btSocket;
     OutputStream os;
     InputStream in;
-    float angle;
+    float angle, x, y;
     private SensorManager mSensorManager;
     private Sensor mAcc;
     private int BTSTATE = 0, SensorStatus=0;
@@ -103,23 +103,72 @@ public class SendInput extends Activity{
             @Override
             public void run() {
                 while(!csv.thread.isCancelled()){
-                    if (angle > 1){
+                    //FORWARD
+                    if (angle > 0.94 && x>1450 && x<1630 && y<715){
                         String msg = "a";
                         try{
                             os.write(msg.getBytes());
-                            System.out.println("REFERENCE 1");
                         }catch(Exception es){}
                     }
-                    else if (angle < 1){
+                    //FRONT-LEFT
+                    else if (angle > 0.47 && angle < 0.93 && y <680 && x < 1449){
+                        String msg = "i";
+                        try{
+                            os.write(msg.getBytes());
+                        }catch(Exception es){}
+                    }
+                    //FRONT-RIGHT
+                    else if (angle > 0.47 && angle < 0.93 && y <680 && x > 1630){
+                        String msg = "k";
+                        try{
+                            os.write(msg.getBytes());
+                        }catch(Exception es){}
+                    }
+                    //BACK
+                    else if (angle > 0.94 && y >790 && x > 1450 && x <1630){
+                        String msg = "b";
+                        try{
+                            os.write(msg.getBytes());
+                        }catch(Exception es){}
+                    }
+                    //BACK-LEFT
+                    else if (angle > 0.47 && angle < 0.93 && y <790 && x < 1449){
                         String msg = "l";
                         try{
                             os.write(msg.getBytes());
-                            System.out.println("REFERENCE 0");
                         }catch(Exception es){}
                     }
-                    System.out.println(angle);
+                    //BACK-RIGHT
+                    else if (angle > 0.47 && angle < 0.93 && y >790 && x > 1630){
+                        String msg = "l";
+                        try{
+                            os.write(msg.getBytes());
+                        }catch(Exception es){}
+                    }
+                    //RIGHT
+                    else if (angle < 0.47 && angle > 0 && x > 1600){
+                        String msg = "j";
+                        try{
+                            os.write(msg.getBytes());
+                        }catch(Exception es){}
+                    }
+                    //LEFT
+                    else if (angle < 0.47 && angle > 0 && x < 1480){
+                        String msg = "h";
+                        try{
+                            os.write(msg.getBytes());
+                        }catch(Exception es){}
+                    }
+                    //STOP
+                    else if (x == 0 && y == 0){
+                        String msg = "l";
+                        try{
+                            os.write(msg.getBytes());
+                        }catch(Exception es){}
+                    }
+
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -145,6 +194,16 @@ public class SendInput extends Activity{
     public float callMe(float value){
         angle = value;
         return angle;
+
+    }
+    public float callMeX(float value){
+        x = value;
+        return x;
+
+    }
+    public float callMeY(float value){
+        y = value;
+        return y;
 
     }
 
@@ -183,16 +242,6 @@ public class SendInput extends Activity{
         }
     }
 
-
-    /*public class MyTask extends AsyncTask<Void, Void, Void>{
-        @Override
-        protected Void doInBackground(Void... params) {
-            while(!csv.thread.isCancelled()){
-                System.out.println(csv.angle);
-            }
-            return null;
-        }
-    }*/
 
 
     Thread BluetoothConnect=new Thread(){
