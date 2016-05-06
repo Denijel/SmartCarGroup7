@@ -2,11 +2,14 @@
 
 Car car;
 Odometer encoderRight;
+SR04 front;
+
 //////////////////////////////////////////////////////
 
 /*
  * Code for LED - turn indicators
- * Code for Odometer = measure speed and distance
+ * Code for Odometer - measure speed and distance
+ * Code for Ultraonic Sensor - Stop car when close to obstacle.
  * Created by Pierre L
  */
 
@@ -14,9 +17,14 @@ Odometer encoderRight;
 const int leftPin = 7;
 const int rightPin = 4;
 
-// Number of the Odometer pins
+// Number of the Odometer pin
 //const int encoderLeftPin = 2;
 const int encoderRightPin = 3;
+
+
+//Number of HCSR04 pins.
+const int TRIGGER_PIN = 5;
+const int ECHO_PIN = 6;
 
 // state used to set the LED. Variables will change
 int leftState = LOW;
@@ -32,8 +40,9 @@ boolean leftBlink = false;
 boolean rightBlink = false;
 char character = 'l';
 int counter = 0;
-int var = 3.6;
-float mps, kph;
+int var = 100;
+float mps, mph;
+int distance;
 
 /////////////////////////////////////////////////////
 
@@ -41,24 +50,32 @@ void setup() {
   Serial3.begin(9600);
   pinMode(leftPin, OUTPUT);
   pinMode(rightPin, OUTPUT);
-  //encoderLeft.attach(encoderLeftPin);
   encoderRight.attach(encoderRightPin);
-  //encoderLeft.begin();
+  //encoderLeft.attach(encoderLeftPin);
   encoderRight.begin();
+  //encoderLeft.begin();
+  front.attach(TRIGGER_PIN, ECHO_PIN);
   car.begin();
 }
 
 void loop(){
+  distance = front.getDistance();
   counter++;
   if (counter == 1000) {
   mps = encoderRight.getSpeed();
-  kph = var * mps;
-  Serial3.println("Speed (m/s)");
-  Serial3.println(mps);
-  Serial3.println("Speed (km/h)");
-  Serial3.println(kph);
+  mph = var * mps;
+  //Serial.println("Speed (m/s)");
+  //Serial.println(mps);
+  Serial3.println(distance);
+  Serial3.println("Speed (m/h)");
+  Serial3.println(mph);
   counter = 0;
   }
+  
+  if(character == 'a' && distance > 20 && distance < 50){
+   character = 'l';
+  }
+  
   if(Serial3.available()){
     character = Serial3.read();
   }
@@ -70,6 +87,8 @@ void loop(){
 /*
  * Switch case to make the car move in different directions
  * Created by Olle R.
+ * Code to make the car blink when turning left and right
+ * Created by Pierre L
  */
 
 void handleInput(char a) {
@@ -123,7 +142,6 @@ void handleInput(char a) {
       default: //Errors and unknown input will cause the car to stop.
         car.setSpeed(0);
         car.setAngle(0);
-    
   }
 }
 
