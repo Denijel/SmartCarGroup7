@@ -16,53 +16,6 @@ public class Splash extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash);
-
-        final ImageView iv = (ImageView) findViewById(R.id.logo);
-        final TextView tv = (TextView) findViewById(R.id.wlcm);
-        final Animation an = AnimationUtils.loadAnimation(getBaseContext(),R.anim.fall);
-        final Animation aan = AnimationUtils.loadAnimation(getBaseContext(),R.anim.fall);
-        final Animation an2 = AnimationUtils.loadAnimation(getBaseContext(),R.anim.abc_fade_out);
-
-        iv.startAnimation(an);
-        an.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                iv.setVisibility(View.VISIBLE);
-                tv.startAnimation(aan);
-                aan.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        tv.setVisibility(View.VISIBLE);
-                        iv.startAnimation(an2);
-                        tv.startAnimation(an2);
-                        finish();
-                        Intent i = new Intent(Splash.this, Start.class);
-                        startActivity(i);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
 
     }
 }

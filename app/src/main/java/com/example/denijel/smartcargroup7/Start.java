@@ -46,14 +46,15 @@ public class Start extends Activity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Start.this, MainActivity.class);
-                startActivity(i);
+                onClickList(v);
             }
         });
 
         help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new ShutDownPi().execute();
+
 //                Intent i = new Intent(Start.this, Help.class);
 //                startActivity(i);
             }
@@ -62,6 +63,7 @@ public class Start extends Activity {
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new ShutDownPi().execute();
                 finish();
                 System.exit(0);
             }
@@ -69,5 +71,10 @@ public class Start extends Activity {
 
 
 
+
+    }
+    public void onClickList(View target){
+        Intent listing = new Intent(this, com.example.denijel.smartcargroup7.BluetoothScan.class);
+        startActivity(listing);
     }
 }
