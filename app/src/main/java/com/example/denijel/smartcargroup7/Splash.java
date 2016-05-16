@@ -24,6 +24,7 @@ public class Splash extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//<<<<<<< HEAD
         setContentView(R.layout.splash);
 
         /*final ImageView iv = (ImageView) findViewById(R.id.logo);
@@ -71,6 +72,8 @@ public class Splash extends Activity {
 
             }
         });
+//=======
+//>>>>>>> ea77fbcaf7a5e072f83a253d499508d2fdf821b6
 
     }
 }

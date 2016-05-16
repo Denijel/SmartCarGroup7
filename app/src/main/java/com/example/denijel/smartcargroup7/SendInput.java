@@ -61,12 +61,11 @@ public class SendInput extends Activity{
         active = true;
         //Try number 3
 
-        new CommTerm().execute();
 
         final Button left1 = (Button) findViewById(R.id.leftBlinker);
         left1.bringToFront();
 
-        String URL = "http://129.232.12.12:8080/?action=stream";
+        String URL = "http://192.168.43.71:8080/?action=stream";
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         System.out.println("Ssh done");
@@ -168,7 +167,7 @@ public class SendInput extends Activity{
                     }
 
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(50);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
