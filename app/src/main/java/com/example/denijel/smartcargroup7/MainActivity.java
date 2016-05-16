@@ -3,6 +3,7 @@ package com.example.denijel.smartcargroup7;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.RippleDrawable;
 import android.hardware.Sensor;
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     ListView listViewPairedDevices;
     ArrayAdapter<BluetoothDevice> pairedDeviceAdapter;
     static boolean active = false;
+
+
 
 
 

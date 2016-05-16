@@ -13,16 +13,24 @@ import android.widget.TextView;
  * Created by Joseph on 4/8/2016.
  */
 public class Splash extends Activity {
+
+
+    final ImageView iv = (ImageView) findViewById(R.id.logo);
+    final TextView tv = (TextView) findViewById(R.id.wlcm);
+    final Animation an = AnimationUtils.loadAnimation(getBaseContext(),R.anim.fall);
+    final Animation aan = AnimationUtils.loadAnimation(getBaseContext(),R.anim.fall);
+    final Animation an2 = AnimationUtils.loadAnimation(getBaseContext(),R.anim.abc_fade_out);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
-        final ImageView iv = (ImageView) findViewById(R.id.logo);
+        /*final ImageView iv = (ImageView) findViewById(R.id.logo);
         final TextView tv = (TextView) findViewById(R.id.wlcm);
         final Animation an = AnimationUtils.loadAnimation(getBaseContext(),R.anim.fall);
         final Animation aan = AnimationUtils.loadAnimation(getBaseContext(),R.anim.fall);
-        final Animation an2 = AnimationUtils.loadAnimation(getBaseContext(),R.anim.abc_fade_out);
+        final Animation an2 = AnimationUtils.loadAnimation(getBaseContext(),R.anim.abc_fade_out);*/
 
         iv.startAnimation(an);
         an.setAnimationListener(new Animation.AnimationListener() {
