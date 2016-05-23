@@ -44,7 +44,7 @@ public class SendInput extends Activity{
     BluetoothSocket btSocket;
     OutputStream os;
     InputStream in;
-    float angle, x, y;
+    float degrees, x, y;
     private SensorManager mSensorManager;
     private Sensor mAcc;
     private int BTSTATE = 0, SensorStatus=0;
@@ -101,8 +101,28 @@ public class SendInput extends Activity{
 
             @Override
             public void run() {
-                while(!csv.thread.isCancelled()){
-                    //FORWARD
+                while(!csv.thread.isCancelled()) {
+                    String divider = " ";
+
+                    if (x == 0 && y == 0) {
+                        String msg = "f";
+                        try {
+                            os.write(msg.getBytes());
+                        } catch (Exception es) {
+                        }
+                    }
+                    else{
+                        String msg = Float.toString(degrees);
+                        try {
+                            System.out.println(msg);
+                            os.write(msg.getBytes());
+                            os.write(divider.getBytes());
+
+                        } catch (Exception es) {
+                        }
+                    }
+
+                    /*//FORWARD
                     if (angle > 0.94 && x>1450 && x<1630 && y<715){
                         String msg = "a";
                         try{
@@ -164,7 +184,7 @@ public class SendInput extends Activity{
                         try{
                             os.write(msg.getBytes());
                         }catch(Exception es){}
-                    }
+                    }*/
 
                     try {
                         Thread.sleep(50);
@@ -191,8 +211,8 @@ public class SendInput extends Activity{
     }
 
     public float callMe(float value){
-        angle = value;
-        return angle;
+        degrees = value;
+        return degrees;
 
     }
     public float callMeX(float value){

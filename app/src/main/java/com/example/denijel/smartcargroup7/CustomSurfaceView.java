@@ -32,7 +32,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
     MySurfaceThread thread;
     String tag = "debugging";
     Paint paint1;
-    float x,y,dx,dy, c, angle;
+    float x,y,dx,dy, c, angle, degrees;
     boolean run = true;
     Bitmap ball, background, cachedBitmap;
     float zeroX, zeroY, radius;
@@ -120,8 +120,10 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         canvas.drawText(Float.toString(x), 60, 60, paint1);
         canvas.drawText(Float.toString(y), 60, 120, paint1);
         canvas.drawText(Float.toString(angle), 60, 180, paint1);
+        canvas.drawText(Float.toString(zeroX), 60, 180, paint1);
+        canvas.drawText(Float.toString(zeroY), 60, 180, paint1);
         if (SendInput.active == true) {
-            passToMain(angle, x, y);
+            passToMain(degrees, x, y);
         }
 
 
@@ -182,38 +184,57 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
                 public float calculateValues(float xx, float yy){
                     dx = xx-zeroX;
                     dy = yy-zeroY;
-                    angle = (float)Math.atan(Math.abs(dy / dx));
+                    angle = (float)Math.atan(Math.abs(dx / dy));
                     c = (float)Math.sqrt(dx * dx + dy * dy);
 
                     if(c > radius){
                         if (dx > 0 && dy > 0) { //lower right corner
-                            xx = (float) (zeroX + radius * Math.cos(angle));
-                            yy = (float) (zeroY + radius * Math.sin(angle));
+                            degrees = (float)Math.toDegrees((float)Math.atan(Math.abs(dy / dx))) + 180;
+                            xx = (float) (zeroX + radius * Math.sin(angle)); //cos
+                            yy = (float) (zeroY + radius * Math.cos(angle)); //sin
                         }
                         else if(dx > 0 && dy < 0){ //top right corner
-                            xx = (float) (zeroX + radius * Math.cos(angle));
-                            yy = (float) (zeroY - radius * Math.sin(angle));
+                            degrees = (float)Math.toDegrees((float)Math.atan(Math.abs(dx / dy))) + 90;
+                            xx = (float) (zeroX + radius * Math.sin(angle));
+                            yy = (float) (zeroY - radius * Math.cos(angle));
                         }
                         else if(dx < 0 && dy < 0){ //top left corner
-                            xx = (float) (zeroX - radius * Math.cos(angle));
-                            yy = (float) (zeroY - radius * Math.sin(angle));
+                            degrees = (float)Math.toDegrees((float)Math.atan(Math.abs(dy / dx)));
+                            xx = (float) (zeroX - radius * Math.sin(angle));
+                            yy = (float) (zeroY - radius * Math.cos(angle));
+
                         }
                         else if(dx < 0 && dy > 0){ //lower left corner
-                            xx = (float) (zeroX - radius * Math.cos(angle));
-                            yy = (float) (zeroY + radius * Math.sin(angle));
+                            degrees = (float)Math.toDegrees((float)Math.atan(Math.abs(dx / dy))) + 270;
+                            xx = (float) (zeroX - radius * Math.sin(angle));
+                            yy = (float) (zeroY + radius * Math.cos(angle));
+
                         }
                     }
                     else {
+                        if (dx > 0 && dy > 0) { //lower right corner
+                            degrees = (float)Math.toDegrees((float)Math.atan(Math.abs(dy / dx))) + 180;
+                        }
+                        else if(dx > 0 && dy < 0){ //top right corner
+                            degrees = (float)Math.toDegrees((float)Math.atan(Math.abs(dx / dy))) + 90;
+                        }
+                        else if(dx < 0 && dy < 0){ //top left corner
+
+                            degrees = (float)Math.toDegrees((float)Math.atan(Math.abs(dy / dx)));
+                        }
+                        else if(dx < 0 && dy > 0){ //lower left corner
+                            degrees = (float)Math.toDegrees((float)Math.atan(Math.abs(dx / dy))) + 270;
+                        }
                         xx = zeroX + dx;
                         yy = zeroY + dy;
+
                     }
                     /*System.out.println("dx: " + dx);
                     System.out.println("dy: " + dy);
                     System.out.println(angle);*/
                     x = xx;
                     y = yy;
-
-                    return angle;
+                    return degrees;
                 }
             });
 
