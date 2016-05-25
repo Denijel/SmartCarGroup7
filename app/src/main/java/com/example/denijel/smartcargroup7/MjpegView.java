@@ -38,7 +38,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
     private int dispWidth;
     private int dispHeight;
     private int displayMode;
-    public Boolean Adin = true;
+
 
     public class MjpegViewThread extends Thread {
         private SurfaceHolder mSurfaceHolder;

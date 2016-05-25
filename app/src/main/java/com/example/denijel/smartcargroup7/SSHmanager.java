@@ -1,21 +1,26 @@
 package com.example.denijel.smartcargroup7;
 
 import com.jcraft.jsch.*;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/*
+* This Class is using a Jsch which is a library for a sshmanager
+* The sshmanager is used for executing lines in the pi such as starting the camera
+* and shutting of the camera
+* Library used : http://www.jcraft.com/jsch/
+*/
 public class SSHmanager
 {
     private static final Logger LOGGER =
             Logger.getLogger(SSHmanager.class.getName());
     private JSch jschSSHChannel;
-    private String strUserName;
-    private String strConnectionIP;
-    private int intConnectionPort;
-    private String strPassword;
+    private String strUserName; //Username for the Login to the pi SSH
+    private String strConnectionIP; //Ip for the Login to the pi SSH
+    private int intConnectionPort; //Port for the Login to the pi SSH
+    private String strPassword; //Password for the Login to the pi SSH
     private Session sesConnection;
     private int intTimeOut;
 

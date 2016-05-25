@@ -35,12 +35,14 @@ public class Options extends Activity implements GestureDetector.OnGestureListen
 //                startActivity(i);
             }
         });
-
+        /*
+        Button below used for shutting down the RPi through the terminal
+         */
         rpi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                // TODO: Shut down Raspberry Pi code
+                new ShutDownPi().execute();
 
             }
         });

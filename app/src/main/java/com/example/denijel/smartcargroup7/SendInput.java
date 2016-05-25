@@ -49,45 +49,35 @@ public class SendInput extends Activity{
     static boolean active = false;
     private static final String TAG = "MainActivity";
     private MjpegView mv;
-
+    String URL = "http://192.168.43.71:8080/?action=stream"; //url for the local ipcamera
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         active = true;
 
-        final Button left1 = (Button) findViewById(R.id.leftBlinker);
-        left1.bringToFront();
-
-        String URL = "http://192.168.43.71:8080/?action=stream";
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        System.out.println("Ssh done");
-        mv = new MjpegView(this);
 
-        LinearLayout camera = (LinearLayout) findViewById(R.id.middleSurface);
-        camera.addView(mv);
-        System.out.println("Added camera");
-        System.out.println("Camera started");
-        new DoRead().execute(URL);
+        mv = new MjpegView(this); // the camera stream view
+
+        LinearLayout camera = (LinearLayout) findViewById(R.id.middleSurface); //adds the camrea stream view to the linearlayout
+        camera.addView(mv);//adds the camrea stream view to the linearlayout
+
+        new DoRead().execute(URL); // starts the camera image streaming
 
         final String address = getIntent().getStringExtra("address").trim();
         btDevice=btAdapter.getRemoteDevice(address);
         BluetoothConnect.start();
 
-        Button connect = (Button)findViewById(R.id.leftBlinker);
-        connect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickList(v);
-            }
-        });
-
-
+        /*
+        The 4 line below makes the background of the customsurfaceview Translucent
+         */
         final CustomSurfaceView csv = (CustomSurfaceView)findViewById(R.id.cSurfaceView);
         csv.setZOrderOnTop(true);
         SurfaceHolder csvHolder = csv.getHolder();
         csvHolder.setFormat(PixelFormat.TRANSLUCENT);
+
         Runnable runnable = new Runnable() {
 
             @Override
@@ -176,15 +166,6 @@ public class SendInput extends Activity{
 
     }
 
-    public void onClickList(View target){
-        Intent listing = new Intent(this, com.example.denijel.smartcargroup7.BluetoothScan.class);
-        startActivity(listing);
-        //On click starts the listener.
-    }
-    public void restartBtn(View target){
-        System.out.println("Hello");
-    }
-
     public float callMe(float value){
         angle = value;
         return angle;
@@ -201,7 +182,10 @@ public class SendInput extends Activity{
         //Sends the Y value to the application.
     }
 
-
+    /*
+    Below class starts the camera streaming and the class Mjpeginputstream which is responsible for the
+    image streaming
+     */
     public class DoRead extends AsyncTask<String, Void, MjpegInputStream> {
         protected MjpegInputStream doInBackground(String... url) {
             //TODO: if camera has authentication deal with it and don't just not work

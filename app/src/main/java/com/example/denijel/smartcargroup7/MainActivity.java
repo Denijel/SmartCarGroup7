@@ -9,17 +9,11 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
-<<<<<<< Updated upstream
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-=======
->>>>>>> Stashed changes
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
@@ -43,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     GestureDetector detector;
     String lastClass = "";
-//    BTList btList = new BTList();
     BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
     BluetoothDevice btDevice;
     BluetoothSocket btSocket;
@@ -69,17 +62,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         System.out.println("started");
-        new CommTerm().execute();
+        new CommTerm().execute(); // executes commterm which is a sshcommands to the raspberry pi which starts the camera
         detector = new GestureDetector(this, this);
 
-        final Button left = (Button) findViewById(R.id.leftBlinker);
-        left.bringToFront();
-        left.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickList(v);
-            }
-        });
         setContentView(R.layout.splash);
 
         final ImageView iv = (ImageView) findViewById(R.id.logo);
