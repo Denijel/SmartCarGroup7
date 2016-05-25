@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         System.out.println("started");
         new CommTerm().execute(); // executes commterm which is a sshcommands to the raspberry pi which starts the camera
         detector = new GestureDetector(this, this);
-
         setContentView(R.layout.splash);
 
         final ImageView iv = (ImageView) findViewById(R.id.logo);
