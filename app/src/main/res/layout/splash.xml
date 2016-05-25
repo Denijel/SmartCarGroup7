@@ -18,7 +18,7 @@
         android:id="@+id/logo"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/group7logo"
+        android:src="@drawable/logo"
         android:visibility="invisible" />
 
     <TextView

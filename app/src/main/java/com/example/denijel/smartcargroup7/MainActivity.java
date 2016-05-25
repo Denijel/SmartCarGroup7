@@ -14,6 +14,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,8 +33,11 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 
-public class MainActivity extends AppCompatActivity {
-    //BTList btList = new BTList();
+public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
+
+    GestureDetector detector;
+    String lastClass = "";
+//    BTList btList = new BTList();
     BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
     BluetoothDevice btDevice;
     BluetoothSocket btSocket;
@@ -54,8 +59,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
+        detector = new GestureDetector(this, this);
 
         final Button left = (Button) findViewById(R.id.leftBlinker);
 
@@ -178,6 +182,84 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode ==  /*depth*/1) {
+            if(resultCode == RESULT_OK){
+                lastClass = data.getStringExtra("the current class");
+            }
+        }
+    }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return detector.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) { }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return true;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) { }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        if(e1.getX()<e2.getX() && e2.getX()-e1.getX() > Math.abs(e2.getY()-e1.getY())){
+
+            if(!this.getClass().equals(Start.class)) {
+                Toast.makeText(getApplicationContext(), "Back", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent();
+                intent.putExtra("the current class", this.getClass().getSimpleName());
+                setResult(RESULT_OK, intent);
+                finish();
+            }else {
+                Toast.makeText(getApplicationContext(), "Can't back further", Toast.LENGTH_SHORT).show();
+            }
+        }
+        if(e1.getX()>e2.getX() && e1.getX()-e2.getX() > Math.abs(e2.getY()-e1.getY())){
+            Toast.makeText(getApplicationContext(),"Undo",Toast.LENGTH_SHORT).show();
+
+            switch (lastClass){
+                case "Start":
+                    startActivityForResult(new Intent(this, Start.class), 1);
+                    break;
+                case "MainActivity":
+                    startActivityForResult(new Intent(this, MainActivity.class), 1);
+                    break;
+                case "Options":
+                    startActivityForResult(new Intent(this, Options.class), 1);
+                    break;
+//                case "Help":
+//                  startActivityForResult(new Intent('Help.this, Help.class), 1);
+//                  break;
+                default:
+                    break;
+            }
+        }
+        if(e1.getY()>e2.getY() && e1.getY()-e2.getY() > Math.abs(e2.getX()-e1.getX())){
+            //swipe up action possibility
+        }
+        if(e1.getY()<e2.getY() && e2.getY()-e1.getY() > Math.abs(e2.getX()-e1.getX())){
+            //swipe down action possibility
+        }
+
+        return true;
+    }
 
 }
