@@ -1,21 +1,17 @@
 package com.example.denijel.smartcargroup7;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.WindowManager;
@@ -35,7 +31,7 @@ import java.net.URI;
 import java.util.UUID;
 
 /**
- * Created by denijel on 4/13/16.
+ * Created by Denijel and Olle
  */
 public class SendInput extends Activity{
 
@@ -59,8 +55,6 @@ public class SendInput extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         active = true;
-        //Try number 3
-
 
         final Button left1 = (Button) findViewById(R.id.leftBlinker);
         left1.bringToFront();
@@ -71,7 +65,6 @@ public class SendInput extends Activity{
         System.out.println("Ssh done");
         mv = new MjpegView(this);
 
-        //setContentView(mv);
         LinearLayout camera = (LinearLayout) findViewById(R.id.middleSurface);
         camera.addView(mv);
         System.out.println("Added camera");
@@ -91,8 +84,6 @@ public class SendInput extends Activity{
         });
 
 
-
-        //final CustomSurfaceView csv = new CustomSurfaceView(this);
         final CustomSurfaceView csv = (CustomSurfaceView)findViewById(R.id.cSurfaceView);
         csv.setZOrderOnTop(true);
         SurfaceHolder csvHolder = csv.getHolder();
@@ -172,19 +163,23 @@ public class SendInput extends Activity{
                         e.printStackTrace();
                     }
                 }
+                //If else statments for sending the correct input to the
+                //Arduino. Each letter represents a placement of the joystick
+                //corresponding to the switch-cases in the Arduino.
+                //Every statement also converts the string into bytes.
             }
         };
 
         Thread mythread = new Thread(runnable);
         mythread.start();
+        // Runs the thread
 
     }
 
     public void onClickList(View target){
         Intent listing = new Intent(this, com.example.denijel.smartcargroup7.BluetoothScan.class);
         startActivity(listing);
-
-
+        //On click starts the listener.
     }
     public void restartBtn(View target){
         System.out.println("Hello");
@@ -193,17 +188,17 @@ public class SendInput extends Activity{
     public float callMe(float value){
         angle = value;
         return angle;
-
+        //Sends the angle value to the application.
     }
     public float callMeX(float value){
         x = value;
         return x;
-
+        //Sends the X value to the application.
     }
     public float callMeY(float value){
         y = value;
         return y;
-
+        //Sends the Y value to the application.
     }
 
 
@@ -242,7 +237,6 @@ public class SendInput extends Activity{
     }
 
 
-
     Thread BluetoothConnect=new Thread(){
         public void run()
         {
@@ -266,12 +260,15 @@ public class SendInput extends Activity{
                 }
                 catch(IOException e){}
                 i++;
+                //Connects bluetooth from Arduino to bluetooth on PC.
             }
             if(flag==0)
             {
                 Toast.makeText(getApplicationContext(),"Unable to connect", Toast.LENGTH_SHORT).show();
                 finish();
             }
+                //If a connection was not established (if flag still has the value 0)
+                //the message Unable to connect will appear and the connection failed.
             while(read_values!=255)
             {
                 try{
@@ -288,14 +285,11 @@ public class SendInput extends Activity{
             }
             catch(IOException e){}
             finish();
+            //If BTSTATE=0 (No bluetooth is connected) it disconnects from the socket.
 
         }
 
     };
-
-
-
-
 
 }
 

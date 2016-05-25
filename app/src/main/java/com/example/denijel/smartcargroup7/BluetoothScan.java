@@ -15,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Set;
 
@@ -56,6 +55,7 @@ public class BluetoothScan extends Activity {
                     PairedDevices.add("No Devices Available");
                     PairedDevices.notifyDataSetChanged();
                 }
+                // Scans for more devices. If no devices are found the Activity title is changed to No Devices Available
             }
         }
     };
@@ -103,20 +103,16 @@ public class BluetoothScan extends Activity {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
-                    //e.printStackTrace();
                 }
-                //scanButton.setBackgroundColor(Color.parseColor("#2695CE"));
                 while(!ba.startDiscovery());
             }
         });
 
         // Binding resources Array to ListAdapter
-        //this.setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, R.id.label, adobe_products));
 
     }
     private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
-            //findViewById(R.id.no_new_devices).setVisibility(View.GONE);
             v.setBackgroundColor(Color.parseColor("#FFA800"));
             if(ba.isDiscovering()==true)
                 ba.cancelDiscovery();
@@ -138,7 +134,6 @@ public class BluetoothScan extends Activity {
         {
             if(resultCode==Activity.RESULT_CANCELED){
                 if(!ba.isEnabled()){
-                    //Toast.makeText(getApplicationContext(), "BLUETOOTH service is NOT AVAILABLE \n  APPLICATION TERMINATING", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -154,6 +149,5 @@ public class BluetoothScan extends Activity {
             ba.cancelDiscovery();
         (BluetoothScan.this).unregisterReceiver(mReceiver);
         super.onPause();
-
     }
 }
