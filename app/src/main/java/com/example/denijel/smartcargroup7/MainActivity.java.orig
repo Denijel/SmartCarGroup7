@@ -76,9 +76,13 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+<<<<<<< HEAD
         System.out.println("started");
         new CommTerm().execute();
+=======
+
         detector = new GestureDetector(this, this);
+>>>>>>> Joseph
 
         final Button left = (Button) findViewById(R.id.leftBlinker);
         left.bringToFront();
