@@ -11,7 +11,7 @@ public class CommTerm extends AsyncTask<String, Void, CommTerm> {
 
         protected CommTerm doInBackground(String... urls) {
 
-            String command = "python raspimjpeg.py -w 640 -h 480 -r 15 -q 20 | streameye";
+            String command = "python raspimjpeg.py -w 360 -h 180 -r 15 -q 10 | streameye";
             String userName = "pi";
             String password = "raspberry";
             String connectionIP = "192.168.43.71";

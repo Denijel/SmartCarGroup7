@@ -41,10 +41,8 @@ boolean rightBlink = false;
 char character = 'l';
 int counter = 0;
 int var = 100;
-int angle;
 float mps, mph;
 int distance;
-int direction = 2;
 
 /////////////////////////////////////////////////////
 
@@ -58,7 +56,6 @@ void setup() {
   //encoderLeft.begin();
   front.attach(TRIGGER_PIN, ECHO_PIN);
   car.begin();
-  
 }
 
 void loop(){
@@ -67,33 +64,22 @@ void loop(){
   if (counter == 1000) {
   mps = encoderRight.getSpeed();
   mph = var * mps;
+  //Serial.println("Speed (m/s)");
+  //Serial.println(mps);
+  Serial3.println(distance);
+  Serial3.println("Speed (m/h)");
+  Serial3.println(mph);
   counter = 0;
   }
   
-  if(angle < 180 && distance > 20 && distance < 50){
-   car.setSpeed(0);
+  if(character == 'a' && distance > 20 && distance < 50){
+   character = 'l';
   }
-
+  
   if(Serial3.available()){
-    angle = Serial3.parseInt();
-    
-  if(angle >= 180){
-      angle = angle - 270;
-      direction = 0;
-    }
-    else if( angle < 180){
-      angle = angle - 90;
-      direction = 1;
-    }
-
-   else if (angle == 770){
-     car.setSpeed(0);
-   }
-    
+    character = Serial3.read();
   }
-  if(direction < 2){
-    handleInput();
-  }
+  handleInput(character);
 }
 
 //////////////////////////////////////////////////////////
@@ -105,35 +91,64 @@ void loop(){
  * Created by Pierre L
  */
 
-void handleInput() {
-    if(direction == 1){
-      if(angle < 45 && angle > -45){
+void handleInput(char a) {
+
+    
+    switch (a) {
+      case 'a': //Drive forward
+        car.setSpeed(30);
+        car.setAngle(0);
         leftState = LOW;
         rightState = LOW;
         digitalWrite(rightPin, rightState);
         digitalWrite(leftPin, leftState);
-      }
-      else if(angle < -45){
-        blinkLeft();
-      }
-      else if(angle > 45){
-        blinkRight();
-      }
-      
-      car.setSpeed(30);
-      car.setAngle(angle);
-    }
-    if(direction == 0){   
-      car.setSpeed(-30);
-      car.setAngle(angle);
-    }
-    
-} 
+        break; 
+      case 'b': //Drive backwards
+        car.setSpeed(-30);
+        car.setAngle(0); 
+        leftState = HIGH;
+        rightState = HIGH;
+        digitalWrite(rightPin, rightState);
+        digitalWrite(leftPin, leftState);
+        break; 
+      case 'h': //Forward hard left 
+      blinkLeft();
+        car.setSpeed(30);
+        car.setAngle(-70);
+        break;
+      case 'i': //Forward light left 
+      blinkLeft();
+        car.setSpeed(30);
+        car.setAngle(-40);
+        break;
+      case 'j': //Forward hard right
+      blinkRight();
+        car.setSpeed(30);
+        car.setAngle(70);
+        break;
+      case 'k': //Forward light right 
+      blinkRight();
+        car.setSpeed(30);
+        car.setAngle(40);
+        break;
+      case 'l': //If joystick is in the middle, stop the car.
+        car.setSpeed(0);
+        car.setAngle(0);
+        leftState = LOW;
+        rightState = LOW;
+        digitalWrite(rightPin, rightState);
+        digitalWrite(leftPin, leftState);
+        break;
+      default: //Errors and unknown input will cause the car to stop.
+        car.setSpeed(0);
+        car.setAngle(0);
+  }
+}
 
 //////////////////////////////////////////////////////////
 
 /*
- * Making the LED "blink" without using delay() function.
+ * Making the LED "blink" without using delay().
  * Created by Pierre L
  */
 
