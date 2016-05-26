@@ -32,8 +32,8 @@
     <Button
         android:layout_width="175dp"
         android:layout_height="50dp"
-        android:text="Help"
-        android:id="@+id/btHelp"
+        android:text="Options"
+        android:id="@+id/btOptions"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="30dp"
         android:background="@drawable/button2"
