@@ -16,7 +16,7 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="landscape"
+            android:screenOrientation="portrait"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,14 +25,26 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Start">
+        <activity android:name=".Start"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".Splash">
+        <activity android:name=".Options"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".Splash"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -42,7 +54,7 @@
         <activity
             android:name=".BluetoothScan"
             android:label="joystick"
-            android:screenOrientation="landscape"
+            android:screenOrientation="portrait"
             >
 
             <intent-filter>
@@ -52,9 +64,8 @@
         <activity
             android:name=".SendInput"
             android:label="test"
-            android:screenOrientation="landscape"
+            android:screenOrientation="portrait"
             >
-
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
