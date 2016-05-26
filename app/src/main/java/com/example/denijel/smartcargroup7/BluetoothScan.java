@@ -100,7 +100,7 @@ public class BluetoothScan extends Activity {
                 scanButton.setText("Scanning......");
                 // Turn on sub-title for new devices
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(5);
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                 }
