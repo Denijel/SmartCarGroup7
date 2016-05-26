@@ -41,6 +41,7 @@ public class Options extends Activity implements GestureDetector.OnGestureListen
         rpi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Shutting Down", Toast.LENGTH_SHORT).show();
 
                 new ShutDownPi().execute();
 
