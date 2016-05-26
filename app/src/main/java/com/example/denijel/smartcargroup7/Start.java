@@ -73,6 +73,7 @@ public class Start extends Activity implements GestureDetector.OnGestureListener
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 finish();
                 System.exit(0);
             }

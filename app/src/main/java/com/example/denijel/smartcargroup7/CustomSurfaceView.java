@@ -25,7 +25,7 @@ import java.util.UUID;
 
 
 /**
- * Created by denijel on 2/23/16.
+ * Created by Denijel and Olle
  */
 public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -56,6 +56,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         super(context,attrs, defStyle);
         init(context);
     }
+    //Creates the 3 Custom Surface Views for the background, the camera and the joystick.
 
     private void init(Context context) {
         thread = new MySurfaceThread(getHolder(), this);
@@ -70,7 +71,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         background = Bitmap.createScaledBitmap(background, 600, 600, true);
         ball = Bitmap.createScaledBitmap(ball, 200, 200, true);
         this.context = context;
-
+        //Initializing variables with set values.
     }
 
 
@@ -84,8 +85,6 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
             System.out.println("Surface holder is: " + surface);
             thread.execute((Void[])null);
         }
-
-
     }
 
     @Override
@@ -97,8 +96,7 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
     public void surfaceDestroyed(SurfaceHolder arg0) {
 
         thread.cancel(true);
-
-
+        //If surface is destroyed the thread stops.
     }
 
     protected void onDraw(Canvas canvas, float x, float y, float zx, float zy){
@@ -106,40 +104,37 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
         dx = x-zx;
         dy = y-zy;
 
-
-
-
         super.onDraw(canvas);
-
-
-        //canvas.drawRGB(255, 0, 0);
-        //canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-
 
         canvas.drawBitmap(background, (canvas.getWidth() - canvas.getWidth() / 7) - background.getWidth() / 2, (canvas.getHeight() - canvas.getHeight() / 4) - background.getHeight() / 2, null);
         canvas.drawText(Float.toString(x), 60, 60, paint1);
         canvas.drawText(Float.toString(y), 60, 120, paint1);
         canvas.drawText(Float.toString(angle), 60, 180, paint1);
-        if (SendInput.active == true) {
+        if (SendInput.active) {
             passToMain(angle, x, y);
         }
+        //Draws the background of the joystick.
 
 
         if (x == 0 && y == 0) {
             canvas.drawBitmap(ball, (canvas.getWidth()-canvas.getWidth() / 7) - ball.getWidth() / 2, (canvas.getHeight()-canvas.getHeight() / 4) - ball.getHeight() / 2, null);
-
+        //Draws the ball on the joystick if it is in the middle.
+        //If x and y == 0 the ball is in th middle.
         }
         else {
             canvas.drawBitmap(ball, x - ball.getWidth() / 2, y - ball.getHeight() / 2, null);
+        //Draws the ball at the current location
+        //determined on the x and y values.
         }
     }
 
     private void passToMain(float value, float x, float y){
-        if (SendInput.active == true) {
+        if (SendInput.active) {
             ((SendInput) context).callMe(value);
             ((SendInput) context).callMeX(x);
             ((SendInput) context).callMeY(y);
         }
+        //Sends input of current position.
 
 
 
@@ -162,7 +157,6 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
                 public boolean onTouch(View v, MotionEvent event) {
                     x = event.getX();
                     y = event.getY();
-                    //System.out.println(x + " " + y);
 
                     calculateValues(x,y);
 
@@ -178,6 +172,8 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
                     }
                     return true;
                 }
+                // Listener for the joystick. When the joystick is touched and moved
+                // the values are registered to be calculated in calculateValues.
 
                 public float calculateValues(float xx, float yy){
                     dx = xx-zeroX;
@@ -203,41 +199,27 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
                             yy = (float) (zeroY + radius * Math.sin(angle));
                         }
                     }
+                    //Calculating the position of the joystick from X and Y.
                     else {
                         xx = zeroX + dx;
                         yy = zeroY + dy;
                     }
-                    /*System.out.println("dx: " + dx);
-                    System.out.println("dy: " + dy);
-                    System.out.println(angle);*/
+
                     x = xx;
                     y = yy;
 
                     return angle;
                 }
             });
-
-
         }
 
 
         //@Override
         protected Void doInBackground(Void... params) {
 
-            //final Surface surface = mSurfaceHolder.getSurface();
-
             while(run) {
 
-
-                //Bitmap mBackgroundImage = Bitmap.createBitmap(600, 600,
-                //       Bitmap.Config.ARGB_8888);
-                //mBackgroundImage.eraseColor(Color.TRANSPARENT);
-
                 Canvas canvas = new Canvas();
-
-                //canvas.drawColor(Color.TRANSPARENT,PorterDuff.Mode.CLEAR);
-
-
 
                 try {
 
@@ -258,12 +240,10 @@ public class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Call
                     if (canvas != null) {
                         mSurfaceHolder.unlockCanvasAndPost(canvas);
                     }
-
                 }
+                //Thread that paints the canvas continuously
             }
             return null;
         }
     }
-
 }
-

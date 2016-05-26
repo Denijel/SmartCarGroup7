@@ -3,55 +3,40 @@ package com.example.denijel.smartcargroup7;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.RippleDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
-import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * Created by Denijel and Olle.
+ */
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
 
     GestureDetector detector;
     String lastClass = "";
-//    BTList btList = new BTList();
     BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
     BluetoothDevice btDevice;
     BluetoothSocket btSocket;
@@ -77,17 +62,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         System.out.println("started");
-        new CommTerm().execute();
+        new CommTerm().execute(); // executes commterm which is a sshcommands to the raspberry pi which starts the camera
         detector = new GestureDetector(this, this);
-
-        final Button left = (Button) findViewById(R.id.leftBlinker);
-        left.bringToFront();
-        left.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickList(v);
-            }
-        });
         setContentView(R.layout.splash);
 
         final ImageView iv = (ImageView) findViewById(R.id.logo);
@@ -110,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 aan.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
-
+            // Runs the animation
                     }
 
                     @Override
@@ -152,10 +128,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
+        //Checks if id is correct.
 
         return super.onOptionsItemSelected(item);
     }
@@ -169,9 +145,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     public void onResume(){
         super.onResume();
-        /*final String address = getIntent().getStringExtra("address").trim();
-        btDevice=btAdapter.getRemoteDevice(address);*/
-        //BluetoothConnect.start();
 
     }
 
@@ -199,10 +172,13 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 catch(IOException e){}
                 i++;
             }
+                //Function for initilazing bluetooth to PC.
             if(flag==0)
             {
                 Toast.makeText(getApplicationContext(),"Unable to connect", Toast.LENGTH_SHORT).show();
                 finish();
+                //If a connection was not established (if flag still has the value 0)
+                //the message Unable to connect will appear and the connection failed.
             }
             while(read_values!=255)
             {
@@ -220,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             }
             catch(IOException e){}
             finish();
+                //If BTSTATE=0 (No bluetooth is connected) it disconnects from the socket.
 
         }
 

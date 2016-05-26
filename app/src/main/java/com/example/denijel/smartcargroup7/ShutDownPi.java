@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 
 /**
  * Created by adinH on 2016-04-09.
+ * A class that uses the SShmanager to shutdown the pi and not pulling the plug which might cause issues with the sd card
+ * or overall hardware. Executes the string Command in the raspberry pi terminal
  */
 public class ShutDownPi extends AsyncTask<String, Void, ShutDownPi> {
 

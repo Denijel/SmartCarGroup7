@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
     >
 
     <com.example.denijel.smartcargroup7.CustomSurfaceView
@@ -11,78 +12,10 @@
         android:background="@android:color/transparent"
         android:id="@+id/cSurfaceView"/>
 
-    <Button xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/leftBlinker"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="250dp"
-        android:text="Connect"
-        />
-
     <LinearLayout
         android:orientation="vertical"
         android:id="@+id/middleSurface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
-
-    <!--<Button xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/rightBlinker"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="120dp"
-        android:layout_marginTop="250dp"
-        android:text="Back"
-        />
-    <Button xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/forwardButton"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="100dp"
-        android:layout_marginLeft="120dp"
-        android:layout_marginTop="120dp"
-        android:text="Forward"
-        />
-    <Button xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/rightButton"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="120dp"
-        android:layout_marginTop="180dp"
-        android:text="Right"
-        android:layout_alignBottom="@+id/leftButton" />
-    <Button xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/leftButton"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="180dp"
-        android:text="Left"
-        android:layout_alignBottom="@+id/label1" />
-    <Button xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/cameraButton"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="250dp"
-        android:layout_marginTop="250dp"
-        android:text="Camera"
-        android:onClick="activateCamera" />
-    <TextView
-        android:id="@+id/label1"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:background="#ff66ff66"
-        android:padding="20px"
-        android:layout_marginBottom="200dp"
-        android:layout_marginLeft="250dp"
-        android:layout_marginTop="200dp"
-        android:text="TextView1" />-->
-
-
-
-
 </RelativeLayout>

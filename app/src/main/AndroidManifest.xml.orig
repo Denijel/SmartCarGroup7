@@ -26,14 +26,22 @@
         </activity>
 
         <activity android:name=".Start"
+<<<<<<< .merge_file_a00780
             android:screenOrientation="portrait">
+=======
+            android:screenOrientation="portrait"
             >
+>>>>>>> .merge_file_a06068
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
+<<<<<<< .merge_file_a00780
+        <activity android:name=".Splash"
+            android:screenOrientation="portrait">
+=======
         <activity android:name=".Options"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -45,6 +53,7 @@
         <activity android:name=".Splash"
             android:screenOrientation="portrait"
             >
+>>>>>>> .merge_file_a06068
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
