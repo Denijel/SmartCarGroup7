@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -13,9 +12,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.SurfaceHolder;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -113,14 +110,14 @@ public class SendInput extends Activity{
                     }
                     //BACK-LEFT
                     else if (angle > 0.47 && angle < 0.93 && y <790 && x < 1449){
-                        String msg = "l";
+                        String msg = "t";
                         try{
                             os.write(msg.getBytes());
                         }catch(Exception es){}
                     }
                     //BACK-RIGHT
                     else if (angle > 0.47 && angle < 0.93 && y >790 && x > 1630){
-                        String msg = "l";
+                        String msg = "f";
                         try{
                             os.write(msg.getBytes());
                         }catch(Exception es){}
