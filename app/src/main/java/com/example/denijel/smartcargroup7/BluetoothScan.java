@@ -9,25 +9,30 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Set;
 
 /**
  * Created by denijel on 3/22/16.
  */
-public class BluetoothScan extends Activity {
+public class BluetoothScan extends Activity implements GestureDetector.OnGestureListener {
     protected final int REQUEST_ENABLE_BT=1;
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
     private ArrayAdapter<String> PairedDevices;
     BluetoothAdapter ba=BluetoothAdapter.getDefaultAdapter();
     ListView PairedDevicesFound;
     ListView ScannedDevicesFound;
+    GestureDetector detector;
+    String lastClass = "";
     protected final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -71,6 +76,8 @@ public class BluetoothScan extends Activity {
         PairedDevicesFound.setOnItemClickListener(mDeviceClickListener);
         PairedDevices=new ArrayAdapter<String>(BluetoothScan.this ,R.layout.forlist);
         PairedDevicesFound.setAdapter(PairedDevices);
+
+        detector = new GestureDetector(this, this);
 
         Set<BluetoothDevice> pairedDevices = ba.getBondedDevices();
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
@@ -138,6 +145,11 @@ public class BluetoothScan extends Activity {
                 }
             }
         }
+        if (requestCode ==  /*depth*/1) {
+            if(resultCode == RESULT_OK){
+                lastClass = data.getStringExtra("the current class");
+            }
+        }
         if(requestCode==100)
             finish();
         return;
@@ -149,5 +161,76 @@ public class BluetoothScan extends Activity {
             ba.cancelDiscovery();
         (BluetoothScan.this).unregisterReceiver(mReceiver);
         super.onPause();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return detector.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) { }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return true;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) { }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        if(e1.getX()<e2.getX() && e2.getX()-e1.getX() > Math.abs(e2.getY()-e1.getY())){
+
+            if(!this.getClass().equals(Start.class)) {
+                Toast.makeText(getApplicationContext(), "Back", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent();
+                intent.putExtra("the current class", this.getClass().getSimpleName());
+                setResult(RESULT_OK, intent);
+                finish();
+            }else {
+                Toast.makeText(getApplicationContext(), "Can't back further", Toast.LENGTH_SHORT).show();
+            }
+        }
+        if(e1.getX()>e2.getX() && e1.getX()-e2.getX() > Math.abs(e2.getY()-e1.getY())){
+            Toast.makeText(getApplicationContext(),"Undo",Toast.LENGTH_SHORT).show();
+
+            switch (lastClass){
+                case "Start":
+                    startActivityForResult(new Intent(this, Start.class), 1);
+                    break;
+                case "MainActivity":
+                    startActivityForResult(new Intent(this, MainActivity.class), 1);
+                    break;
+                case "Options":
+                    startActivityForResult(new Intent(this, Options.class), 1);
+                    break;
+                case "Help":
+                    startActivityForResult(new Intent(this, Help.class), 1);
+                    break;
+                default:
+                    break;
+            }
+        }
+        if(e1.getY()>e2.getY() && e1.getY()-e2.getY() > Math.abs(e2.getX()-e1.getX())){
+            //swipe up action possibility
+        }
+        if(e1.getY()<e2.getY() && e2.getY()-e1.getY() > Math.abs(e2.getX()-e1.getX())){
+            //swipe down action possibility
+        }
+
+        return true;
     }
 }

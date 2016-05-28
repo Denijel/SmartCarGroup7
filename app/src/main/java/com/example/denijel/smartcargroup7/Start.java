@@ -56,9 +56,6 @@ public class Start extends Activity implements GestureDetector.OnGestureListener
             @Override
             public void onClick(View v) {
                 onClickList(v);
-                //Intent i = new Intent(Start.this, MainActivity.class);
-                //depth += 1;
-                //startActivityForResult(i, /*depth*/1);
             }
         });
 
