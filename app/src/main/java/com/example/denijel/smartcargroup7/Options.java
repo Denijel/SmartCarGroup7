@@ -117,6 +117,9 @@ public class Options extends Activity implements GestureDetector.OnGestureListen
                 case "Help":
                   startActivityForResult(new Intent(this, Help.class), 1);
                   break;
+                case "BluetoothScan":
+                    startActivityForResult(new Intent(this, BluetoothScan.class), 1);
+                    break;
                 default:
                     break;
             }

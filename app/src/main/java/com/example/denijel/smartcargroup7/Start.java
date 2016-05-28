@@ -55,7 +55,7 @@ public class Start extends Activity implements GestureDetector.OnGestureListener
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickList(v);
+                startActivityForResult(new Intent(Start.this, BluetoothScan.class), 1);
             }
         });
 
@@ -75,10 +75,6 @@ public class Start extends Activity implements GestureDetector.OnGestureListener
                 System.exit(0);
             }
         });
-    }
-    public void onClickList(View target){
-        Intent listing = new Intent(this, com.example.denijel.smartcargroup7.BluetoothScan.class);
-        startActivityForResult(listing, 1);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -147,6 +143,9 @@ public class Start extends Activity implements GestureDetector.OnGestureListener
                 case "Help":
                   startActivityForResult(new Intent(this, Help.class), 1);
                   break;
+                case "BluetoothScan":
+                    startActivityForResult(new Intent(this, BluetoothScan.class), 1);
+                    break;
                 default:
                     break;
             }

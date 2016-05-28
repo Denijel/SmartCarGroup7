@@ -220,6 +220,9 @@ public class BluetoothScan extends Activity implements GestureDetector.OnGesture
                 case "Help":
                     startActivityForResult(new Intent(this, Help.class), 1);
                     break;
+                case "BluetoothScan":
+                    startActivityForResult(new Intent(this, BluetoothScan.class), 1);
+                    break;
                 default:
                     break;
             }
