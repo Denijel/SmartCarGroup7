@@ -31,8 +31,8 @@ public class Options extends Activity implements GestureDetector.OnGestureListen
         help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent i = new Intent(Start.this, Help.class);
-//                startActivity(i);
+                Intent i = new Intent(Options.this, Help.class);
+                startActivityForResult(i,1);
             }
         });
         /*
@@ -53,7 +53,7 @@ public class Options extends Activity implements GestureDetector.OnGestureListen
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode ==  /*depth*/1) {
+        if (requestCode == 1) {
             if(resultCode == RESULT_OK){
                 lastClass = data.getStringExtra("the current class");
             }
@@ -114,9 +114,9 @@ public class Options extends Activity implements GestureDetector.OnGestureListen
                 case "Options":
                     startActivityForResult(new Intent(this, Options.class), 1);
                     break;
-//                case "Help":
-//                  startActivityForResult(new Intent('Help.this, Help.class), 1);
-//                  break;
+                case "Help":
+                  startActivityForResult(new Intent(this, Help.class), 1);
+                  break;
                 default:
                     break;
             }

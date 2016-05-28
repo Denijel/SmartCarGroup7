@@ -147,9 +147,9 @@ public class Start extends Activity implements GestureDetector.OnGestureListener
                 case "Options":
                     startActivityForResult(new Intent(this, Options.class), 1);
                     break;
-//                case "Help":
-//                  startActivityForResult(new Intent('Help.this, Help.class), 1);
-//                  break;
+                case "Help":
+                  startActivityForResult(new Intent(this, Help.class), 1);
+                  break;
                 default:
                     break;
             }
