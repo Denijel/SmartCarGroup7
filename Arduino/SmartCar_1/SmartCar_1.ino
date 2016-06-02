@@ -26,7 +26,7 @@ const int encoderRightPin = 3;
 const int TRIGGER_PIN = 5;
 const int ECHO_PIN = 6;
 
-// state used to set the LED. Variables will change
+// state used to set the LED. 
 int leftState = LOW;
 int rightState = LOW;
 
@@ -39,7 +39,6 @@ const long interval = 500;
 boolean leftBlink = false;
 boolean rightBlink = false;
 char character = 'l';
-int counter = 0;
 int var = 100;
 float mps, mph;
 int distance;
@@ -51,34 +50,36 @@ void setup() {
   pinMode(leftPin, OUTPUT);
   pinMode(rightPin, OUTPUT);
   encoderRight.attach(encoderRightPin);
-  //encoderLeft.attach(encoderLeftPin);
   encoderRight.begin();
+  //encoderLeft.attach(encoderLeftPin);
   //encoderLeft.begin();
   front.attach(TRIGGER_PIN, ECHO_PIN);
   car.begin();
 }
 
 void loop(){
+  
+  /*
+   * This code was implemented to display the speed of which
+   * the car is moving.
+   * Created by Pierre L
+   * 
+   * mps = encoderRight.getSpeed();
+   * mph = var * mps;
+   * Serial.println("Speed (m/h)");
+   * Serial.println(mph);
+   * 
+   */
+
+ // gets distance from ultrasonic sensor.
   distance = front.getDistance();
-  counter++;
-  if (counter == 1000) {
-  mps = encoderRight.getSpeed();
-  mph = var * mps;
-  //Serial.println("Speed (m/s)");
-  //Serial.println(mps);
-  Serial3.println(distance);
-  Serial3.println("Speed (m/h)");
-  Serial3.println(mph);
-  counter = 0;
-  }
-  
-  if(character == 'a' && distance > 20 && distance < 50){
-   character = 'l';
-  }
-  
+
+ // reads input.
   if(Serial3.available()){
     character = Serial3.read();
   }
+
+// handles input
   handleInput(character);
 }
 
@@ -88,11 +89,33 @@ void loop(){
  * Switch case to make the car move in different directions
  * Created by Olle R.
  * Code to make the car blink when turning left and right
+ * and collision check.
  * Created by Pierre L
  */
 
 void handleInput(char a) {
 
+  /*
+   * If any of the "forward" characters is sent, the car will
+   * stop at least 20cm from an object until a reverse char
+   * is issued.
+   */
+
+if(character == 'a' && distance > 20 && distance < 50){
+   character = 'l';
+  }
+  else if(character == 'i' && distance > 10 && distance < 35){
+   character = 'l';
+  }
+  else if(character == 'k' && distance > 10 && distance < 35){
+   character = 'l';
+  }
+  else if(character == 'h' && distance > 10 && distance < 35){
+   character = 'l';
+  }
+  else if(character == 'j' && distance > 10 && distance < 35){
+   character = 'l';
+  }
     
     switch (a) {
       case 'a': //Drive forward
@@ -106,29 +129,25 @@ void handleInput(char a) {
       case 'b': //Drive backwards
         car.setSpeed(-30);
         car.setAngle(0); 
-        leftState = HIGH;
-        rightState = HIGH;
-        digitalWrite(rightPin, rightState);
-        digitalWrite(leftPin, leftState);
         break; 
       case 'h': //Forward hard left 
       blinkLeft();
-        car.setSpeed(30);
+        car.setSpeed(50);
         car.setAngle(-70);
         break;
       case 'i': //Forward light left 
       blinkLeft();
-        car.setSpeed(30);
+        car.setSpeed(50);
         car.setAngle(-40);
         break;
       case 'j': //Forward hard right
       blinkRight();
-        car.setSpeed(30);
+        car.setSpeed(50);
         car.setAngle(70);
         break;
       case 'k': //Forward light right 
       blinkRight();
-        car.setSpeed(30);
+        car.setSpeed(50);
         car.setAngle(40);
         break;
       case 'l': //If joystick is in the middle, stop the car.
@@ -139,6 +158,14 @@ void handleInput(char a) {
         digitalWrite(rightPin, rightState);
         digitalWrite(leftPin, leftState);
         break;
+       case 't': //Drive backwards left
+        car.setSpeed(-50);
+        car.setAngle(-40); 
+        break; 
+        case 'f': //Drive backwards right
+        car.setSpeed(-50);
+        car.setAngle(40); 
+        break; 
       default: //Errors and unknown input will cause the car to stop.
         car.setSpeed(0);
         car.setAngle(0);
@@ -149,13 +176,15 @@ void handleInput(char a) {
 
 /*
  * Making the LED "blink" without using delay().
+ * This will ensure that you can still use commands during
+ * the "delay".
  * Created by Pierre L
  */
 
 void blinkLeft() {
 unsigned long currentMillis = millis();
   if (currentMillis - previousMillis >= interval) {
-    //save the last time you blinked the LED
+    //saves the last time you blinked the LED
     previousMillis = currentMillis;
 
     rightState = LOW;
@@ -167,6 +196,7 @@ unsigned long currentMillis = millis();
         leftState = LOW; }
 
   //set the LED with the leftState of the variable
+  //also turns of rightState if it was previously on
     digitalWrite(rightPin, rightState);
     digitalWrite(leftPin, leftState);
   }
@@ -187,6 +217,7 @@ unsigned long currentMillis = millis();
         rightState = LOW; }
   
   //set the LED with the rightState of the variable
+  //also turns of leftState if it was previously on
     digitalWrite(rightPin, rightState);
     digitalWrite(leftPin, leftState);
 
