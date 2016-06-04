@@ -101,14 +101,20 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
 
         public void run() {
             start = System.currentTimeMillis();
+
+
+            /*
+            Porterduff used to set the fpsoverlay over the camera image,
+            usage found here: http://stackoverflow.com/questions/8280027/what-does-porterduff-mode-mean-in-android-graphics-what-does-it-do
+            */
             PorterDuffXfermode mode = new PorterDuffXfermode(PorterDuff.Mode.DST_OVER);
             Bitmap bm;
-            int width;
-            int height;
+            int width; //fpsoverlay width
+            int height;//fpsoverlay height
             Rect destRect;
-            Canvas c = null;
+            Canvas c = null; //canvas for camera
             Paint p = new Paint();
-            String fps = "";
+            String fps = "";//fps string for fpsoverlay
             while (mRun) {
                     if (surfaceDone) {
                         try {
@@ -121,12 +127,12 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
                                     c.drawBitmap(bm, null, destRect, p); // draws  the map
                                     showFps = false; //disable the showfps to not make red markers on stream
                                     if (showFps) {
-                                        /*
+
                                         p.setXfermode(mode);
                                         if (ovl != null) {
                                             height = ((ovlPos & 1) == 1) ? destRect.top : destRect.bottom - ovl.getHeight();
                                             width = ((ovlPos & 8) == 8) ? destRect.left : destRect.right - ovl.getWidth();
-                                            c.drawBitmap(ovl, width, height, null);
+                                            c.drawBitmap(ovl, width, height, null); //draws a bitmap overlay
                                         }
                                         p.setXfermode(null);
                                         frameCounter++;
@@ -134,9 +140,9 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
                                             fps = String.valueOf(frameCounter) + "fps";
                                             frameCounter = 0;
                                             start = System.currentTimeMillis();
-                                            ovl = makeFpsOverlay(overlayPaint, fps);
+                                            ovl = makeFpsOverlay(overlayPaint, fps); //makes the overlay with the correct fps
 
-                                        }*/
+                                        }
                                     }
                                 } catch (IOException e) {
                                 }
