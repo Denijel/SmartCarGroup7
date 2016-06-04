@@ -21,10 +21,11 @@ import java.util.Properties;
  http://stackoverflow.com/questions/3205191/android-and-mjpeg
  The Mjpeg Input stream class is the same but everything else is altered to fit our architecture.
 
+
  */
 public class MjpegInputStream extends DataInputStream {
-    private final byte[] SOI_MARKER = { (byte) 0xFF, (byte) 0xD8 };
-    private final byte[] EOF_MARKER = { (byte) 0xFF, (byte) 0xD9 };
+    private final byte[] SOI_MARKER = { (byte) 0xFF, (byte) 0xD8 }; // The SOI marker is the start of the stream, read about jpeg here http://www.fileformat.info/format/jpeg/egff.htm
+    private final byte[] EOF_MARKER = { (byte) 0xFF, (byte) 0xD9 }; // the EOF marker is the end of the stream, goes by EOI on wikipedia (end of image), in this case "end of file"
     private final String CONTENT_LENGTH = "Content-Length";
     private final static int HEADER_MAX_LENGTH = 100;
     private final static int FRAME_MAX_LENGTH = 40000 + HEADER_MAX_LENGTH;
@@ -82,6 +83,8 @@ public class MjpegInputStream extends DataInputStream {
     }
     /*
     Method for reading each MjpegFrame with the methods above
+    Uses the java class bitmapfactory to decode the framedata byte.
+
      */
     public Bitmap readMjpegFrame() throws IOException {
         mark(FRAME_MAX_LENGTH);
@@ -90,14 +93,14 @@ public class MjpegInputStream extends DataInputStream {
         byte[] header = new byte[headerLen];
         readFully(header);
         try {
-            mContentLength = parseContentLength(header);
+            mContentLength = parseContentLength(header); //parses the content length
         } catch (NumberFormatException nfe) {
-            mContentLength = getEndOfSeqeunce(this, EOF_MARKER);
+            mContentLength = getEndOfSeqeunce(this, EOF_MARKER); //gets end sequence of the EOF_MARKER(EOF = end of file(image), goes by EOI on wikipedia(End of image)
         }
         reset();
         byte[] frameData = new byte[mContentLength];
-        skipBytes(headerLen);
-        readFully(frameData);
-        return BitmapFactory.decodeStream(new ByteArrayInputStream(frameData));
+        skipBytes(headerLen); //skips the start of the image bytes
+        readFully(frameData); // reads the byte
+        return BitmapFactory.decodeStream(new ByteArrayInputStream(frameData)); //decodes the framedata byte
     }
 }

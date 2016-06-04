@@ -71,14 +71,19 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
             if (displayMode == MjpegView.SIZE_FULLSCREEN) return new Rect(0, 0, dispWidth, dispHeight);
             return null;
         }
-
+        /*
+        Sets surface size
+         */
         public void setSurfaceSize(int width, int height) {
             synchronized(mSurfaceHolder) {
                 dispWidth = width;
                 dispHeight = height;
             }
         }
-
+        /*
+        Method that shows the fps overlay and draws it on the screen, only used for testing our FPS
+        never showed in the demo since it made the UI look uglier
+         */
         private Bitmap makeFpsOverlay(Paint p, String text) {
             Rect b = new Rect();
             p.getTextBounds(text, 0, text.length(), b);
@@ -113,7 +118,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
                                     destRect = destRect(bm.getWidth(), bm.getHeight());
                                     c.drawColor(Color.BLACK);
                                     c.drawBitmap(bm, null, destRect, p);
-                                    showFps = false;
+                                    showFps = false; //disable the showfps to not make red markers on stream
                                     if (showFps) {
                                         p.setXfermode(mode);
                                         if (ovl != null) {
@@ -147,25 +152,29 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         holder.addCallback(this);
         thread = new MjpegViewThread(holder, context);
         setFocusable(true);
-        overlayPaint = new Paint();
-        overlayPaint.setTextAlign(Paint.Align.LEFT);
-        overlayPaint.setTextSize(12);
+        overlayPaint = new Paint(); //makes paint for fps
+        overlayPaint.setTextAlign(Paint.Align.LEFT); //sets alignment for the text on the overlay
+        overlayPaint.setTextSize(12); //fps overlay textsize
         overlayPaint.setTypeface(Typeface.DEFAULT);
-        overlayTextColor = Color.WHITE;
-        overlayBackgroundColor = Color.BLACK;
+        overlayTextColor = Color.WHITE; //color
+        overlayBackgroundColor = Color.BLACK; //backround
         ovlPos = MjpegView.POSITION_LOWER_RIGHT;
         displayMode = MjpegView.SIZE_STANDARD;
         dispWidth = getWidth();
         dispHeight = getHeight();
     }
-
+    /*
+    Sets mRun to true which starts the while loop in the run function and aswell starts the thread.
+     */
     public void startPlayback() {
         if(mIn != null) {
             mRun = true;
             thread.start();
         }
     }
-
+    /*
+    Stops everything.
+     */
     public void stopPlayback() {
         mRun = false;
         boolean retry = true;
@@ -177,13 +186,21 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    public MjpegView(Context context, AttributeSet attrs) { super(context, attrs); init(context); }
-    public void surfaceChanged(SurfaceHolder holder, int f, int w, int h) { thread.setSurfaceSize(w, h); }
+    public MjpegView(Context context, AttributeSet attrs) {
+        super(context, attrs); init(context);
+    }
+    public void surfaceChanged(SurfaceHolder holder, int f, int w, int h) {
+        thread.setSurfaceSize(w, h);
+    }
 
+    /*
+    Used when the surface gets destroyed, sets mrun to false and stops the while loop, and sets surfacedone to false
+    which also denies the while loop. Uses the method stopplayback aswell
+     */
     public void surfaceDestroyed(SurfaceHolder holder) {
         surfaceDone = false;
         mRun = false;
-        //stopPlayback();
+        stopPlayback();
 
     }
 
@@ -194,13 +211,23 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         surfaceDone = true;
     }
+    /*
+    method below just used to
+     */
     public void showFps(boolean b) {
         showFps = b;
     }
+    /*
+    Sets the MjpegInputstream as source. and starts playback
+     */
+
     public void setSource(MjpegInputStream source) {
         mIn = source;
         startPlayback();
     }
+    /*
+    the 4 first method are just for the fps overlay which are never used.
+     */
     public void setOverlayPaint(Paint p) {
         overlayPaint = p;
     }
@@ -213,6 +240,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
     public void setOverlayPosition(int p) {
         ovlPos = p;
     }
+
     public void setDisplayMode(int s) {
 
         displayMode = s;
