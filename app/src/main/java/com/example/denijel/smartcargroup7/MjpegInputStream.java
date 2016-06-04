@@ -15,7 +15,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Properties;
+/*
+ A class used for getitng the datainputstream for the PI's camera stream. Using the MjPegInputstreamer only from
+ https://bitbucket.org/neuralassembly/simplemjpegview/ but using a further back dated version found on
+ http://stackoverflow.com/questions/3205191/android-and-mjpeg
+ The Mjpeg Input stream class is the same but everything else is altered to fit our architecture.
 
+ */
 public class MjpegInputStream extends DataInputStream {
     private final byte[] SOI_MARKER = { (byte) 0xFF, (byte) 0xD8 };
     private final byte[] EOF_MARKER = { (byte) 0xFF, (byte) 0xD9 };
@@ -24,6 +30,10 @@ public class MjpegInputStream extends DataInputStream {
     private final static int FRAME_MAX_LENGTH = 40000 + HEADER_MAX_LENGTH;
     private int mContentLength = -1;
 
+    /*
+    Uses a httpclient to get the url stream. The url is the PI's IP. Gets the Stream locally by having
+    the phone with the application and the pi sitting on the same network.
+     */
     public static MjpegInputStream read(String url) {
         HttpResponse res;
         DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -36,7 +46,9 @@ public class MjpegInputStream extends DataInputStream {
     }
 
     public MjpegInputStream(InputStream in) { super(new BufferedInputStream(in, FRAME_MAX_LENGTH)); }
-
+    /*
+    Just simply gets the end of each bye sequence
+     */
     private int getEndOfSeqeunce(DataInputStream in, byte[] sequence) throws IOException {
         int seqIndex = 0;
         byte c;
@@ -49,19 +61,28 @@ public class MjpegInputStream extends DataInputStream {
         }
         return -1;
     }
-
+    /*
+    Simply gets the start of each data stream that gets in and then also gets the end. This also returns
+    total sequence length
+     */
     private int getStartOfSequence(DataInputStream in, byte[] sequence) throws IOException {
         int end = getEndOfSeqeunce(in, sequence);
         return (end < 0) ? (-1) : (end - sequence.length);
     }
-
+    /*
+        Method for parsing each byte to a integer. This also returns a interger later used in the
+        method ReadMjpegFrame(). Using the java class properties to get all values from the ByteArrayInputStream
+        headerIn. Then it parses the property props to a integer and returns it.
+     */
     private int parseContentLength(byte[] headerBytes) throws IOException, NumberFormatException {
         ByteArrayInputStream headerIn = new ByteArrayInputStream(headerBytes);
         Properties props = new Properties();
         props.load(headerIn);
         return Integer.parseInt(props.getProperty(CONTENT_LENGTH));
     }
-
+    /*
+    Method for reading each MjpegFrame with the methods above
+     */
     public Bitmap readMjpegFrame() throws IOException {
         mark(FRAME_MAX_LENGTH);
         int headerLen = getStartOfSequence(this, SOI_MARKER);

@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 * The sshmanager is used for executing lines in the pi such as starting the camera
 * and shutting of the camera
 * Library used : http://www.jcraft.com/jsch/
+* Adin
 */
 public class SSHmanager
 {
@@ -52,24 +53,9 @@ public class SSHmanager
         intTimeOut = 60000;
     }
 
-    public SSHmanager(String userName, String password, String connectionIP,
-                      String knownHostsFileName, int connectionPort)
-    {
-        doCommonConstructorActions(userName, password, connectionIP,
-                knownHostsFileName);
-        intConnectionPort = connectionPort;
-        intTimeOut = 60000;
-    }
-
-    public SSHmanager(String userName, String password, String connectionIP,
-                      String knownHostsFileName, int connectionPort, int timeOutMilliseconds)
-    {
-        doCommonConstructorActions(userName, password, connectionIP,
-                knownHostsFileName);
-        intConnectionPort = connectionPort;
-        intTimeOut = timeOutMilliseconds;
-    }
-
+        /*
+        Connecting to the Pi SSH with the entered IP, username and password.
+        */
     public String connect()
     {
         String errorMessage = null;
@@ -79,7 +65,6 @@ public class SSHmanager
             sesConnection = jschSSHChannel.getSession(strUserName,
                     strConnectionIP, intConnectionPort);
             sesConnection.setPassword(strPassword);
-            // UNCOMMENT THIS FOR TESTING PURPOSES, BUT DO NOT USE IN PRODUCTION
             sesConnection.setConfig("StrictHostKeyChecking", "no");
             sesConnection.connect(intTimeOut);
 
@@ -92,7 +77,9 @@ public class SSHmanager
 
         return errorMessage;
     }
-
+    /*
+    Error checking logger
+  */
     private String logError(String errorMessage)
     {
         if(errorMessage != null)
@@ -103,7 +90,9 @@ public class SSHmanager
 
         return errorMessage;
     }
-
+    /*
+     Error checking logger
+     */
     private String logWarning(String warnMessage)
     {
         if(warnMessage != null)
@@ -114,7 +103,9 @@ public class SSHmanager
 
         return warnMessage;
     }
-
+    /*
+    Method that actually sends the command that we want to execute in the terminal
+     */
     public String sendCommand(String command)
     {
         StringBuilder outputBuffer = new StringBuilder();
@@ -148,7 +139,9 @@ public class SSHmanager
 
         return outputBuffer.toString();
     }
-
+    /*
+    Closes the SSH connection
+     */
     public void close()
     {
         sesConnection.disconnect();

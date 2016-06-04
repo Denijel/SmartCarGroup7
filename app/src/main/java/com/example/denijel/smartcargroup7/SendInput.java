@@ -45,7 +45,7 @@ public class SendInput extends Activity{
     private static final UUID MY_UUID =UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     static boolean active = false;
     private static final String TAG = "MainActivity";
-    private MjpegView mv;
+    private MjpegView mv; // the customsurfaceclass that is a mjpegviewer for the camera
     String URL = "http://192.168.43.71:8080/?action=stream"; //url for the local ipcamera
 
     protected void onCreate(Bundle savedInstanceState){
@@ -181,7 +181,7 @@ public class SendInput extends Activity{
 
     /*
     Below class starts the camera streaming and the class Mjpeginputstream which is responsible for the
-    image streaming
+    image streaming. Uses a httpclient to connect to the camera stream.
      */
     public class DoRead extends AsyncTask<String, Void, MjpegInputStream> {
         protected MjpegInputStream doInBackground(String... url) {
@@ -209,11 +209,15 @@ public class SendInput extends Activity{
 
             return null;
         }
-
+        /*
+        Sets the source of the mjpegview to the result we gotten. The displaymode is according to size best fit
+        And if we want we can show fps, but since it makes a red mark on screen with numbers we disable that for
+        a cleaner UI
+         */
         protected void onPostExecute(MjpegInputStream result) {
             mv.setSource(result);
             mv.setDisplayMode(MjpegView.SIZE_BEST_FIT);
-            mv.showFps(true);
+            mv.showFps(false);
         }
     }
 
