@@ -17,9 +17,7 @@ import android.widget.Button;
 import java.io.IOException;
 
 public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
-    public final static int POSITION_UPPER_LEFT  = 9;
-    public final static int POSITION_UPPER_RIGHT = 3;
-    public final static int POSITION_LOWER_LEFT  = 12;
+
     public final static int POSITION_LOWER_RIGHT = 6;
 
     public final static int SIZE_STANDARD   = 1;
@@ -47,7 +45,10 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         private Bitmap ovl;
 
         public MjpegViewThread(SurfaceHolder surfaceHolder, Context context) { mSurfaceHolder = surfaceHolder; }
-
+        /*
+            Simply makes the rectangle screen of the camera streaming according to what you chose on line 220 in sendinput. If you chose standard it alter it,
+            best fit it alters it aswell, fullscreen it makes it fullscreen.
+         */
         private Rect destRect(int bmw, int bmh) {
             int tempx;
             int tempy;
@@ -115,11 +116,12 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
                             synchronized (mSurfaceHolder) {
                                 try {
                                     bm = mIn.readMjpegFrame();
-                                    destRect = destRect(bm.getWidth(), bm.getHeight());
+                                    destRect = destRect(bm.getWidth(), bm.getHeight()); //makes the rectangle for the screen stream input
                                     c.drawColor(Color.BLACK);
-                                    c.drawBitmap(bm, null, destRect, p);
+                                    c.drawBitmap(bm, null, destRect, p); // draws  the map
                                     showFps = false; //disable the showfps to not make red markers on stream
                                     if (showFps) {
+                                        /*
                                         p.setXfermode(mode);
                                         if (ovl != null) {
                                             height = ((ovlPos & 1) == 1) ? destRect.top : destRect.bottom - ovl.getHeight();
@@ -134,7 +136,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
                                             start = System.currentTimeMillis();
                                             ovl = makeFpsOverlay(overlayPaint, fps);
 
-                                        }
+                                        }*/
                                     }
                                 } catch (IOException e) {
                                 }
@@ -150,7 +152,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
     private void init(Context context) {
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
-        thread = new MjpegViewThread(holder, context);
+        thread = new MjpegViewThread(holder, context); //new thread
         setFocusable(true);
         overlayPaint = new Paint(); //makes paint for fps
         overlayPaint.setTextAlign(Paint.Align.LEFT); //sets alignment for the text on the overlay
@@ -159,9 +161,9 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
         overlayTextColor = Color.WHITE; //color
         overlayBackgroundColor = Color.BLACK; //backround
         ovlPos = MjpegView.POSITION_LOWER_RIGHT;
-        displayMode = MjpegView.SIZE_STANDARD;
-        dispWidth = getWidth();
-        dispHeight = getHeight();
+        displayMode = MjpegView.SIZE_STANDARD; //size standard
+        dispWidth = getWidth(); //display width
+        dispHeight = getHeight(); //display height
     }
     /*
     Sets mRun to true which starts the while loop in the run function and aswell starts the thread.
@@ -189,6 +191,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
     public MjpegView(Context context, AttributeSet attrs) {
         super(context, attrs); init(context);
     }
+
     public void surfaceChanged(SurfaceHolder holder, int f, int w, int h) {
         thread.setSurfaceSize(w, h);
     }
@@ -240,7 +243,10 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback {
     public void setOverlayPosition(int p) {
         ovlPos = p;
     }
-
+    /*
+    Sets the display mode, 3 alternatives
+    best_Fit, fullscreen or standard.
+     */
     public void setDisplayMode(int s) {
 
         displayMode = s;
